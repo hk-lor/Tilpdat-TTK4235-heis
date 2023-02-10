@@ -1,1 +1,115 @@
-<mxfile host="app.diagrams.net" modified="2023-02-10T14:19:32.858Z" agent="5.0 (X11; Ubuntu)" version="20.8.20" etag="ew9l5HbCZpk_UGjTeEr-" type="github"><diagram name="Page-1" id="AqBInIVPp4gdgWNFYO3s">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-02-10T15:14:07.231Z" agent="5.0 (X11; Ubuntu)" etag="dBmBDMp8iKOwMx18D95P" version="20.8.20" type="github">
+  <diagram name="Page-1" id="AqBInIVPp4gdgWNFYO3s">
+    <mxGraphModel dx="729" dy="415" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-1" target="T8M_ERFm2-ZNn2aJVhRW-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#330000;" vertex="1" parent="1">
+          <mxGeometry x="435" y="30" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-4" target="T8M_ERFm2-ZNn2aJVhRW-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-4" value="Init" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="370" y="120" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-5" value="On Entry: find_state()&#xa;goto_floor_one()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="T8M_ERFm2-ZNn2aJVhRW-4">
+          <mxGeometry y="26" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.571;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-10" target="T8M_ERFm2-ZNn2aJVhRW-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-10" target="T8M_ERFm2-ZNn2aJVhRW-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="296" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.737;entryY=-0.02;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-10" target="T8M_ERFm2-ZNn2aJVhRW-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-10" value="Idle" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="370" y="260" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-11" value="On Entry: await_input(), &#xa;close_door()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="T8M_ERFm2-ZNn2aJVhRW-10">
+          <mxGeometry y="26" width="150" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-14" value="&lt;div&gt;State found&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="450" y="220" width="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-15" value="Active up" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="420" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-16" value="On Entry: close_door(), &#xa;goto_floor_up()&#xa;Set_motor_dir(UP)&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="T8M_ERFm2-ZNn2aJVhRW-15">
+          <mxGeometry y="26" width="190" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-17" value="Active down" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="400" width="210" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-18" value="On Entry: close_door(),&#xa; goto_floor_down()&#xa;Set_motor_dir(DOWN)&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="T8M_ERFm2-ZNn2aJVhRW-17">
+          <mxGeometry y="26" width="210" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.571;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-30" target="T8M_ERFm2-ZNn2aJVhRW-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.456;entryY=1.008;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-30" target="T8M_ERFm2-ZNn2aJVhRW-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="438" y="565" />
+              <mxPoint x="438" y="380" />
+              <mxPoint x="438" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-30" value="Stop" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="350" y="565" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-31" value="On Entry: stop_motors()&#xa;Open_door()&#xa;&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="T8M_ERFm2-ZNn2aJVhRW-30">
+          <mxGeometry y="26" width="180" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.444;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-31" target="T8M_ERFm2-ZNn2aJVhRW-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-36" value="&lt;div&gt;If state is defined, and stop button has been pressed&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="370" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-37" value="&lt;div&gt;-lift order up&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="580" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-38" value="&lt;div&gt;-lift order down&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="530" y="570" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-43" value="&lt;div&gt;-lift order up&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="280" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-45" value="&lt;div&gt;-lift order down&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="275" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.006;entryY=0.807;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-18" target="T8M_ERFm2-ZNn2aJVhRW-31">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="453" />
+              <mxPoint x="740" y="635" />
+              <mxPoint x="550" y="635" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.907;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="T8M_ERFm2-ZNn2aJVhRW-16" target="T8M_ERFm2-ZNn2aJVhRW-31">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="468" />
+              <mxPoint x="120" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T8M_ERFm2-ZNn2aJVhRW-50" value="-Standing on the same floor as button call" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="350" width="110" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
