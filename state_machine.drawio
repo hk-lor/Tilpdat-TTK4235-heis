@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-02-23T15:26:43.881Z" agent="5.0 (Windows)" etag="BlDrhm6ibj3qK8ZkGnRP" version="20.8.23" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2023-02-23T15:31:25.447Z" agent="5.0 (Windows)" etag="AEQHvDiyxpWAVSIoGwdA" version="20.8.23" type="github" pages="4">
   <diagram name="Tilstandsdiagram" id="AqBInIVPp4gdgWNFYO3s">
     <mxGraphModel dx="1114" dy="561" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -167,7 +167,7 @@
         <mxCell id="6lWp3zhusnsJ6clz5Ans-7" value="Stop" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="Cf06HT7npbFK_Chf-fhN-1" vertex="1">
           <mxGeometry x="360" y="760" width="160" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="6lWp3zhusnsJ6clz5Ans-8" value="entry: stop_motors()&#xa;entry: stop_timer()&#xa;entry: clear_queue()&#xa;entry: update_state()&#xa;do: button_polling()&#xa;do: check_obstruction()&#xa;do: check_valid_floor()&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6lWp3zhusnsJ6clz5Ans-7" vertex="1">
+        <mxCell id="6lWp3zhusnsJ6clz5Ans-8" value="entry: stop_motors()&#xa;entry: start_stop_timer()&#xa;entry: clear_queue()&#xa;entry: update_state()&#xa;do: button_polling()&#xa;do: check_obstruction()&#xa;do: check_valid_floor()&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6lWp3zhusnsJ6clz5Ans-7" vertex="1">
           <mxGeometry y="26" width="160" height="114" as="geometry" />
         </mxCell>
         <mxCell id="6lWp3zhusnsJ6clz5Ans-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="Cf06HT7npbFK_Chf-fhN-1" source="Cf06HT7npbFK_Chf-fhN-11" target="6lWp3zhusnsJ6clz5Ans-7" edge="1">
@@ -229,8 +229,8 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="6lWp3zhusnsJ6clz5Ans-22" value="Stop button&lt;br&gt;released" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="Cf06HT7npbFK_Chf-fhN-1" vertex="1">
-          <mxGeometry x="320" y="680" width="90" height="30" as="geometry" />
+        <mxCell id="6lWp3zhusnsJ6clz5Ans-22" value="Stop button&lt;br&gt;released / timeout" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="Cf06HT7npbFK_Chf-fhN-1" vertex="1">
+          <mxGeometry x="300" y="680" width="150" height="30" as="geometry" />
         </mxCell>
         <mxCell id="6lWp3zhusnsJ6clz5Ans-25" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.001;entryY=0.071;entryDx=0;entryDy=0;entryPerimeter=0;" parent="Cf06HT7npbFK_Chf-fhN-1" source="6lWp3zhusnsJ6clz5Ans-2" target="Cf06HT7npbFK_Chf-fhN-11" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
