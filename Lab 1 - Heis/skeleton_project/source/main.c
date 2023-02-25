@@ -3,50 +3,63 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
-
-
+#include "driver/queue.h"
 
 int main(){
-    elevio_init();
     
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
+    queue_initalize();
 
-    elevio_motorDirection(DIRN_UP);
+    queue_create_new_order(0, UP);
+    queue_create_new_order(1, UP);
+    queue_create_new_order(2, UP);
+    queue_create_new_order(3, UP);
+    queue_create_new_order(0, UP);
+    queue_create_new_order(1, UP);
+    queue_create_new_order(2, UP);
+    queue_create_new_order(3, UP);
+    queue_create_new_order(0, UP);
+    queue_create_new_order(1, UP);
+    queue_create_new_order(2, UP);
+    queue_create_new_order(3, UP);
 
-    while(1){
-        int floor = elevio_floorSensor();
-        printf("floor: %d \n",floor);
+    queue_print();
+    queue_flush();
 
-        if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
-        }
+    queue_create_new_order(0, UP);
+    queue_create_new_order(1, UP);
+    queue_create_new_order(2, UP);
 
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }
+    queue_print();
 
+    struct order* test = queue_search(3);
 
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-                elevio_buttonLamp(f, b, btnPressed);
-            }
-        }
-
-        if(elevio_obstruction()){
-            elevio_stopLamp(1);
-        } else {
-            elevio_stopLamp(0);
-        }
-        
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        }
-        
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+    if(test != NULL) {
+        printf("Found floor %i \n", test->floor);
+        queue_delete(test);
     }
 
+    queue_create_new_order(2, UP);
+    
+    struct order* test1 = queue_search(2);
+
+    if(test1 != NULL) {
+        printf("Found floor %i \n", test1->floor);
+    } else {
+        printf("NULL \n");
+    }
+
+    queue_delete(test1);
+
+    struct order* test2 = queue_search(1);
+
+    if(test2 != NULL) {
+        printf("Found floor %i \n", test2->floor);
+    }
+
+    queue_delete(test2);
+    
+    queue_print();
+
     return 0;
+
 }
