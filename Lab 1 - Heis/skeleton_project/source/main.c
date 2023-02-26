@@ -5,61 +5,32 @@
 #include "driver/elevio.h"
 #include "driver/queue.h"
 
-int main(){
+int main(){    
+    int length = 0;
     
     queue_initalize();
-
-    queue_create_new_order(0, UP);
+   
     queue_create_new_order(1, UP);
-    queue_create_new_order(2, UP);
-    queue_create_new_order(3, UP);
-    queue_create_new_order(0, UP);
-    queue_create_new_order(1, UP);
-    queue_create_new_order(2, UP);
-    queue_create_new_order(3, UP);
-    queue_create_new_order(0, UP);
-    queue_create_new_order(1, UP);
-    queue_create_new_order(2, UP);
-    queue_create_new_order(3, UP);
+    queue_create_new_order(3, DOWN);
+    queue_create_new_order(4, DOWN);
 
     queue_print();
-    queue_flush();
-
-    queue_create_new_order(0, UP);
-    queue_create_new_order(1, UP);
-    queue_create_new_order(2, UP);
-
-    queue_print();
-
-    struct order* test = queue_search(3);
-
-    if(test != NULL) {
-        printf("Found floor %i \n", test->floor);
-        queue_delete(test);
-    }
-
-    queue_create_new_order(2, UP);
     
-    struct order* test1 = queue_search(2);
+    queue_update_next_order();
 
-    if(test1 != NULL) {
-        printf("Found floor %i \n", test1->floor);
-    } else {
-        printf("NULL \n");
-    }
+    queue_print_current_order();
 
-    queue_delete(test1);
+    update_elevator_current_floor();
 
-    struct order* test2 = queue_search(1);
+    queue_order_finished_signal();
 
-    if(test2 != NULL) {
-        printf("Found floor %i \n", test2->floor);
-    }
+    queue_update_next_order();
 
-    queue_delete(test2);
-    
     queue_print();
 
+    queue_print_current_order();
+
+    
     return 0;
 
 }
