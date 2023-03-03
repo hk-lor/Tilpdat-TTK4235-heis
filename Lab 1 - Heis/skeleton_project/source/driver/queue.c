@@ -3,7 +3,6 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "string.h"
-
 #include "elevio.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,17 +104,22 @@ int queue_flush() {
     return 0;
 }
 
-void queue_remove_current_order() {
-    struct order* order = queue_search(global_elevator_current_order->floor);
-    queue_delete(order);
+void queue_remove_floor_orders() {
+    struct order* floor_order = queue_search(global_elevator_current_order->floor);
+    while(floor_order != NULL) {
+        floor_order = queue_search(global_elevator_current_order->floor);
+        if(floor_order != NULL) {
+            queue_delete(floor_order);
+        }
+    }
 };
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue algorithms
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-int update_elevator_current_floor() {
+int fetch_elevator_current_floor() {
+
     return 0;
 }
 

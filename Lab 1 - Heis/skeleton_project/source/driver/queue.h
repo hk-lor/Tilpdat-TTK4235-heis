@@ -20,10 +20,9 @@ int queue_initalize();
 int queue_length();
 int queue_flush();
 int queue_update_next_order();
-void queue_remove_current_order();
+void queue_remove_floor_orders();
 
 int update_elevator_current_floor();
-int determine_next_floor();
 
 struct order* queue_search(int floor);
 struct order* queue_fetch_latest_order();

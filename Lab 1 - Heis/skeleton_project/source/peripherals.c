@@ -56,9 +56,8 @@ void peripherals_goto_floor_one() {
 }
 
 void peripherals_remove_floor_orders(int floor) {
-    queue_remove_floor_order(floor);
+    queue_remove_floor_orders(floor);
 };
-
 
 void peripherals_check_queue() {
     return;

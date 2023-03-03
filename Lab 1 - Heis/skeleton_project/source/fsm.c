@@ -86,12 +86,13 @@ void fsm_idle_exit() {
 }
 
 void fsm_active_up_exit() {
-    peripherals_remove_current_order();
+    peripherals_remove_current_orders(elevator_current_floor);
+    // update current_order, next_order
     elevio_floorIndicator(elevator_current_floor);
 }
 
 void fsm_active_down_exit() {
-    peripherals_remove_current_order();
+    peripherals_remove_current_order(elevator_current_floor);
     elevio_floorIndicator(elevator_current_floor);
 }
 
@@ -132,7 +133,6 @@ void fsm_active_up_update() {
 void fsm_active_down_update() {
     //check_queue
     peripherals_button_polling();
-    //update_state
     //update_destination_floor
     int valid_floor = peripherals_check_valid_floor();
     if(valid_floor) {
@@ -149,6 +149,5 @@ void fsm_stop_update() {
     }
 }
 void fsm_valid_floor_check_update() {
-    //check_valid_floor
-    //if statement
+    return;
 }
