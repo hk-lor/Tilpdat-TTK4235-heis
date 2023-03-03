@@ -17,9 +17,8 @@ static int global_elevator_current_floor = 0;
 static struct order* global_elevator_current_order = NULL;
 static struct order* global_elevator_next_order = NULL;
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
-// Queue utils
+// Queue basic operations
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 int queue_initalize() {
@@ -107,24 +106,26 @@ int queue_flush() {
 }
 
 void queue_remove_current_order() {
-    global_elevator_previous_order = global_elevator_current_order;
     struct order* order = queue_search(global_elevator_current_order->floor);
     queue_delete(order);
 };
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue algorithms
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+int update_elevator_current_floor() {
+    return 0;
+}
+
 int queue_update_next_order() {
-    if(global_elevator_previous_order == NULL) {
-        // If queue is empty
-        global_elevator_current_order = queue_find_latest_order();
-    } 
     return 0;  
 }
 
-int update_elevator_current_floor() {
-    global_elevator_current_floor += 1;
-    return 0;
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue debugging utils
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 int util_queue_print_current_order() {
     if(global_elevator_current_order == NULL) {

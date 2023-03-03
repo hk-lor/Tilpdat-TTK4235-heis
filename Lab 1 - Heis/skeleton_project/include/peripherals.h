@@ -10,3 +10,4 @@ void peripherals_update_state();
 void peripherals_goto_floor_one();
 void peripherals_remove_current_order();
 void peripherals_check_queue();
+void peripherals_timer_3seconds();

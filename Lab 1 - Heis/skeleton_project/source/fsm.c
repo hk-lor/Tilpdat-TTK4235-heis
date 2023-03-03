@@ -35,8 +35,8 @@ static transitions_t state_transitions[] = {
 
 static volatile event_t event;
 static stateMachine_t *stateMachine;
-static int elevator_current_floor;
 
+static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
 
@@ -122,6 +122,11 @@ void fsm_active_up_update() {
     fsm_button_polling();
     //update_state
     //update_destination_floor
+
+    int valid_floor = peripherals_check_valid_floor();
+    if(valid_floor) {
+        elevator_current_floor = valid_floor;
+    }
 }
 
 void fsm_active_down_update() {
@@ -129,7 +134,10 @@ void fsm_active_down_update() {
     peripherals_button_polling();
     //update_state
     //update_destination_floor
-    peripherals_check_valid_floor();
+    int valid_floor = peripherals_check_valid_floor();
+    if(valid_floor) {
+        elevator_current_floor = valid_floor;
+    }
 }
 void fsm_stop_update() {
     peripherals_button_polling();

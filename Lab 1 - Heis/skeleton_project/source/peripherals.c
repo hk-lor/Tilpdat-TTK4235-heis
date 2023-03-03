@@ -1,15 +1,17 @@
 #include "stdio.h"
+#include "stdlib.h"
+#include "time.h"
 #include "driver/queue.h"
 #include "include/peripherals.h"
 
 
 void peripherals_open_door_timer(int floor) {
     elevio_doorOpenLamp(floor);
-    //time wait 3 secs??
+    peripherals_timer_3seconds();
     elevio_doorOpenLamp(floor);
 }
 
-bool peripherals_check_valid_floor() {
+int peripherals_check_valid_floor() {
     if (elevio_floorSensor() != -1) {
         return 1;
     }
@@ -59,8 +61,34 @@ void peripherals_remove_current_order() {
 
 
 void peripherals_check_queue() {
-    
+    return;
 }
 
-// Updates FSM current_order and next_order
-void peripherals_update_current_order();
+void peripherals_update_current_order() {
+    return;
+}
+
+int peripherals_timer_3seconds() {
+    int *count = malloc(sizeof(int));
+    if (count == NULL) {
+        return 1;
+    }
+
+    *count = 0;
+
+    clock_t start_time = clock();
+    double elapsed_time;
+
+    while (*count < 3) {
+        elapsed_time = (double)(clock() - start_time) / CLOCKS_PER_SEC;
+        if (elapsed_time >= 1.0) {
+            (*count)++;
+            start_time = clock();
+        }
+    }
+
+    free(count);
+    count = NULL;
+
+    return 0;
+}

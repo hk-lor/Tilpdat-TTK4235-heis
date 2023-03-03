@@ -22,8 +22,6 @@ int main(){
 
     update_elevator_current_floor();
 
-    queue_order_finished_signal();
-
     queue_update_next_order();
 
     queue_print();
