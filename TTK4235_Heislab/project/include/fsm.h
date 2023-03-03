@@ -2,7 +2,7 @@
 
 #include <stdint.h> // xintx_t types
 #include <stdbool.h> // booleans
-#include "driver/elevio.h" //elevio driver
+#include "../source/driver/elevio.h"//elevio driver
 
 // States
 typedef enum {

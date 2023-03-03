@@ -3,12 +3,12 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
-#include "driver/queue.h"
+#include "../include/queue.h"
 
 int main(){    
-
     
-        
+    queue_simulate();
+
     return 0;
 
 }

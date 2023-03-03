@@ -1,8 +1,9 @@
-#include "skeleton_project\include\fsm.h"
-#include "skeleton_project\include\peripherals.h"
-#include "driver/elevio.h"
-#include "driver/queue.h"
+#include "../include/fsm.h"
+#include "../include/peripherals.h"
+#include "../source/driver/elevio.h"
+#include "../include/queue.h"
 
+/* 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // State funcions and transistions
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,3 +152,4 @@ void fsm_stop_update() {
 void fsm_valid_floor_check_update() {
     return;
 }
+*/

@@ -1,8 +1,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "time.h"
-#include "driver/queue.h"
-#include "include/peripherals.h"
+#include "../source/driver/elevio.h"
+#include "../include/peripherals.h"
 
 
 void peripherals_open_door_timer(int floor) {

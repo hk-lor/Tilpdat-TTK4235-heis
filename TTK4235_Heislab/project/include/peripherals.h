@@ -1,6 +1,6 @@
 #pragma once
 
-#include "skeleton_project\source\driver\elevio.h"
+#include "../source/driver/elevio.h"
 #include "stdbool.h"
 
 void peripherals_open_door_timer();
