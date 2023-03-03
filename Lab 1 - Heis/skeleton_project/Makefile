@@ -6,7 +6,6 @@ CFLAGS      = -Wall -g -std=gnu11 -fsanitize=address
 LDFLAGS     = -fsanitize=address
 EXCLUDE     = '*test*'
 
-
 SOURCEDIR = source
 OBJECTDIR = build
 
@@ -24,6 +23,7 @@ clean:
 ## executable depends on object files: link them
 $(EXECUTABLE): $(OBJECTS) 
 	$(COMPILER) $^ -o $@ $(LDFLAGS)
+	
 
 ## object files depend on source files: compile them
 $(OBJECTDIR)/%.o: $(SOURCEDIR)/%.c

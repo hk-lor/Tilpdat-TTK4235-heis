@@ -3,50 +3,34 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
+#include "driver/queue.h"
 
-
-
-int main(){
-    elevio_init();
+int main(){    
+    int length = 0;
     
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
+    queue_initalize();
+   
+    queue_create_new_order(1, UP);
+    queue_create_new_order(3, DOWN);
+    queue_create_new_order(4, DOWN);
 
-    elevio_motorDirection(DIRN_UP);
+    queue_print();
+    
+    queue_update_next_order();
 
-    while(1){
-        int floor = elevio_floorSensor();
-        printf("floor: %d \n",floor);
+    queue_print_current_order();
 
-        if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
-        }
+    update_elevator_current_floor();
 
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }
+    queue_order_finished_signal();
 
+    queue_update_next_order();
 
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-                elevio_buttonLamp(f, b, btnPressed);
-            }
-        }
+    queue_print();
 
-        if(elevio_obstruction()){
-            elevio_stopLamp(1);
-        } else {
-            elevio_stopLamp(0);
-        }
-        
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        }
-        
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
-    }
+    queue_print_current_order();
 
+    
     return 0;
+
 }
