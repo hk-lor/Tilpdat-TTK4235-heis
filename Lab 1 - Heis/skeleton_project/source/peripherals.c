@@ -26,3 +26,19 @@ bool check_obstruction() {
 void update_state() {
     
 };
+
+void goto_floor_one() {
+    if (elevio_floorSensor < 1) {
+        elevio_motorDirection(1);
+        while (elevio_floorSensor != 1) {
+            elevio_motorDirection(1);
+        }
+        elevio_motorDirection(0);
+    }
+    else {
+        while (elevio_floorSensor != 1) {
+            elevio_motorDirection(-1);
+        }
+        elevio_motorDirection(0);
+    }
+}

@@ -9,3 +9,5 @@ void button_polling();
 bool check_obstruction();
 
 void update_state();
+
+void goto_floor_one();

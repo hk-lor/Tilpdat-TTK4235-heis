@@ -1,4 +1,5 @@
 #include "skeleton_project\include\fsm.h"
+#include "skeleton_project\include\peripherals.h"
 #include "driver/elevio.h"
 
 // Entry functions
@@ -31,7 +32,7 @@ void valid_floor_check_enter() {
 
 // Update functions
 void init_update() {
-    //check_valid_floor
+    check_valid_floor();
     return;
 }
 
