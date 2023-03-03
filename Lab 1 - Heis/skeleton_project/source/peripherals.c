@@ -11,12 +11,12 @@ void peripherals_open_door_timer(int floor) {
     elevio_doorOpenLamp(floor);
 }
 
-int peripherals_check_valid_floor() {
+bool peripherals_check_valid_floor() {
     if (elevio_floorSensor() != -1) {
-        return 1;
+        return false;
     }
     else {
-        return 0;
+        return true;
     }
 }
 
@@ -55,9 +55,9 @@ void peripherals_goto_floor_one() {
     }
 }
 
-void peripherals_remove_current_order() {
-    queue_remove_current_order();
-}
+void peripherals_remove_floor_orders(int floor) {
+    queue_remove_floor_order(floor);
+};
 
 
 void peripherals_check_queue() {
