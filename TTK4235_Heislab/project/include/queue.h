@@ -27,9 +27,6 @@ void queue_assign_current_global_order(struct order* order);
 void queue_assign_next_global_order(struct order* order);
 void queue_set_global_orders_as_empty();
 
-
-
-
 // Fetch from elevio.h
 int queue_update_elevator_current_floor();
 
@@ -41,7 +38,6 @@ int util_print_order(struct order* order);
 int util_queue_print_current_order();
 int util_queue_print();
 int util_queue_print_next_order();
-
 
 void queue_simulate();
 

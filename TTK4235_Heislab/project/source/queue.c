@@ -212,6 +212,7 @@ int queue_update() {
 }
 
 int queue_update_fsm() {
+    // send global_elevator_current_order, global_elevator_next_order, and current floor to FSM
     return 0;
 }
 
