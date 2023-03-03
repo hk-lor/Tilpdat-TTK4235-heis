@@ -10,9 +10,9 @@ int main(){
     
     queue_initalize();
    
-    queue_create_new_order(1, UP);
-    queue_create_new_order(3, DOWN);
-    queue_create_new_order(4, DOWN);
+    queue_create_new_order(1, BUTTON_HALL_UP);
+    queue_create_new_order(3, BUTTON_HALL_DOWN);
+    queue_create_new_order(4, BUTTON_CAB);
 
     queue_print();
     

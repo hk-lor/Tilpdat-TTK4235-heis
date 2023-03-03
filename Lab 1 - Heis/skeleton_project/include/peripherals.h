@@ -1,13 +1,12 @@
+#pragma once
+
 #include "skeleton_project\source\driver\elevio.h"
 
-void open_door_timer();
-
-bool check_valid_floor();
-
-void button_polling();
-
-bool check_obstruction();
-
-void update_state();
-
-void goto_floor_one();
+void peripherals_open_door_timer();
+bool peripherals_check_valid_floor();
+void peripherals_button_polling();
+bool peripherals_check_obstruction();
+void peripherals_update_state();
+void peripherals_goto_floor_one();
+void peripherals_remove_current_order();
+void peripherals_check_queue();

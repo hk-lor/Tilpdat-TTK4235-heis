@@ -86,9 +86,6 @@ void elevio_stopLamp(int value){
     pthread_mutex_unlock(&sockmtx);
 }
 
-
-
-
 int elevio_callButton(int floor, ButtonType button){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){6, button, floor}, 4, 0);

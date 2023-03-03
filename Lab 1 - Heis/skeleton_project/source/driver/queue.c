@@ -4,13 +4,23 @@
 #include "stdio.h"
 #include "string.h"
 
+#include "elevio.h"
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue variables
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 static struct order* head;                      // Linked list queue head
 static int queue_order_length = 0;
 
 static int global_elevator_current_floor = 0;
 static struct order* global_elevator_current_order = NULL;
-static struct order* global_elevator_previous_order = NULL;
+static struct order* global_elevator_next_order = NULL;
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Queue utils
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 int queue_initalize() {
    head = NULL;
@@ -44,11 +54,11 @@ int queue_delete(struct order* order) {
         free(order);
         queue_order_length -= 1;
     }
-    
+
     return 0;
 }
 
-struct order* queue_find_latest_order() {
+struct order* queue_fetch_latest_order() {
     struct order* order = head;
 
     while (order != NULL && order->floor > 0 && order->dir > 0) {
@@ -70,7 +80,7 @@ int queue_length() {
     return queue_order_length;
 }
 
-int queue_create_new_order(int floor, enum direction dir) {
+int queue_create_new_order(int floor, ButtonType dir) {
     struct order* new_order = malloc(sizeof(struct order));
     
     new_order->dir = dir;
@@ -78,19 +88,6 @@ int queue_create_new_order(int floor, enum direction dir) {
 
     queue_insert(new_order);
     queue_order_length += 1;
-
-    return 0;
-}
-
-int queue_print() {
-    int queue_index = queue_order_length;
-    struct order* order = head;
-
-    while(order != NULL) {
-        printf("Order: %i Floor: %i \n", queue_index, order->floor);
-        order = order->next;
-        queue_index -= 1;
-    }
 
     return 0;
 }
@@ -109,6 +106,13 @@ int queue_flush() {
     return 0;
 }
 
+void queue_remove_current_order() {
+    global_elevator_previous_order = global_elevator_current_order;
+    struct order* order = queue_search(global_elevator_current_order->floor);
+    queue_delete(order);
+};
+
+
 int queue_update_next_order() {
     if(global_elevator_previous_order == NULL) {
         // If queue is empty
@@ -117,20 +121,13 @@ int queue_update_next_order() {
     return 0;  
 }
 
-void queue_order_finished_signal() {
-    global_elevator_previous_order = global_elevator_current_order;
-    struct order* order = queue_search(global_elevator_current_order->floor);
-    queue_delete(order);
-}
-
 int update_elevator_current_floor() {
     global_elevator_current_floor += 1;
     return 0;
 }
 
-int queue_print_current_order() {
+int util_queue_print_current_order() {
     if(global_elevator_current_order == NULL) {
-        
         return 1;
     } else {
         printf("test \n");
@@ -139,7 +136,6 @@ int queue_print_current_order() {
     }
 };
 
-
 int util_print_order(struct order* order) {
     if(order == NULL) {
         return 1;
@@ -147,4 +143,16 @@ int util_print_order(struct order* order) {
         printf("Order: Floor %i Direction %i \n", order->floor, order->dir);
         return 0;
     }
+}
+
+int util_queue_print() {
+    int queue_index = queue_order_length;
+    struct order* order = head;
+
+    while(order != NULL) {
+        printf("Order: %i Floor: %i \n", queue_index, order->floor);
+        order = order->next;
+        queue_index -= 1;
+    }
+    return 0;
 }

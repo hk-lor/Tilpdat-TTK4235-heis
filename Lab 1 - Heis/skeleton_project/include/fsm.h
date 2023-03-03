@@ -42,17 +42,17 @@ typedef struct transitions_s {
 } transitions_t;
 
 // Entry functions
-void init_enter();
-void idle_enter();
-void active_up_enter();
-void active_down_enter();
-void stop_enter();
-void valid_floor_check_enter();
+void fsm_init_enter();
+void fsm_idle_enter();
+void fsm_active_up_enter();
+void fsm_active_down_enter();
+void fsm_stop_enter();
+void fsm_valid_floor_check_enter();
 
 // Update functions
-void init_update();
-void idle_update();
-void active_up_update();
-void active_down_update();
-void stop_update();
-void valid_floor_check_update();
+void fsm_init_update();
+void fsm_idle_update();
+void fsm_active_up_update();
+void fsm_active_down_update();
+void fsm_stop_update();
+void fsm_valid_floor_check_update();
