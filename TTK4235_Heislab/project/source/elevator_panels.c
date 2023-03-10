@@ -28,32 +28,6 @@ static uint8_t floor_lamp_2 = 0;
 static uint8_t floor_lamp_3 = 0;
 static uint8_t floor_lamp_4 = 0;
 
-
-// Init
-void init_lights() {
-    button_elevator_1 = 0;
-    button_elevator_2 = 0;
-    button_elevator_3 = 0;
-    button_elevator_4 = 0;
-
-    stop_button = 0;
-    door_open = 0;
-    obstruction = 0;
-
-    floor_button_1_up = 0;
-    floor_button_2_up = 0;
-    floor_button_3_up = 0;
-
-    floor_button_2_down = 0;
-    floor_button_3_down = 0;
-    floor_button_4_down = 0;
-
-    floor_lamp_1 = 0;
-    floor_lamp_2 = 0;
-    floor_lamp_3 = 0;
-    floor_lamp_4 = 0;
-}
-
 // Heisdør
 void open_door() {
     if(door_open == 0) {
@@ -161,3 +135,30 @@ void update_floor_lamp_4(uint8_t lamp_value) {
         floor_lamp_4  = lamp_value;
     }
 };
+
+// Init
+void init_lights() {
+    close_door();
+
+// Heispanel
+    update_button_elevator_1(0);
+    update_button_elevator_2(0);
+    update_button_elevator_3(0);
+    update_button_elevator_4(0);
+
+    update_stop_button(0);
+
+// Etasjepanel
+    update_floor_button_1_up(0);
+    update_floor_button_2_up(0);
+    update_floor_button_3_up(0);
+
+    update_floor_button_2_down (0);
+    update_floor_button_3_down (0);
+    update_floor_button_4_down (0);
+
+    update_floor_lamp_1(0);
+    update_floor_lamp_2(0);
+    update_floor_lamp_3(0);
+    update_floor_lamp_4(0);
+}
