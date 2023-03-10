@@ -6,9 +6,6 @@
 #include "../include/queue.h"
 
 int main(){    
-    
     queue_simulate();
-
     return 0;
-
 }

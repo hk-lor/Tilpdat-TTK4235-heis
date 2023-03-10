@@ -144,7 +144,7 @@ void queue_remove_floor_orders(int floor) {
 
 };
 
-// structs are statically allocated
+// structs are statically allocated due to getting into trouble when using pointers
 void queue_set_global_orders_as_empty() {
     global_elevator_current_order.floor = -1;
     global_elevator_next_order.floor = -1;
@@ -163,6 +163,11 @@ int queue_update_elevator_current_floor() {
     return 0;
 }
 
+int queue_update_fsm() {
+    // send global_elevator_current_order, global_elevator_next_order, and current floor to FSM
+    return 0;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue algorithm
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,20 +182,20 @@ int queue_update() {
             return 1;
         } 
         else {
-            if(global_elevator_current_order.floor == -1) {
+            if(global_elevator_current_order.floor == -1) {         // Check if current_order is empty
                 queue_assign_current_global_order(order);
 
-            } else if(global_elevator_next_order.floor == -1) {
+            } else if(global_elevator_next_order.floor == -1) {     // Check if next_order is empty
                 queue_assign_next_global_order(order);
             } else if(order->dir == BUTTON_CAB) {
                 int previous_dir = global_elevator_current_floor - global_previous_floor;
                 int future_dir = order->floor - global_elevator_current_floor;
-                if( (previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if direction matches (Negative = down, positive = up)
+                if( (previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if order cab direction matches previous (Negative = down, positive = up)
                     queue_assign_next_global_order(&global_elevator_current_order);
                     queue_assign_current_global_order(order);
                 }
 
-            } else if(order->dir == global_elevator_current_order.dir) {
+            } else if(order->dir == global_elevator_current_order.dir) {        // Determines if we need to do stops along the way
                 if(order->dir == DIRN_UP) {
                     if(order->floor < global_elevator_current_order.floor) {
                         queue_assign_next_global_order(&global_elevator_current_order);
@@ -209,11 +214,6 @@ int queue_update() {
     }
     queue_update_fsm();
     return 0; 
-}
-
-int queue_update_fsm() {
-    // send global_elevator_current_order, global_elevator_next_order, and current floor to FSM
-    return 0;
 }
 
 void queue_assign_current_global_order(struct order* order) {
@@ -422,34 +422,5 @@ void queue_scenario() {
 
 void queue_simulate() {
 
-    queue_initalize();
-
-    queue_create_new_order(1, BUTTON_HALL_DOWN); 
-    queue_create_new_order(2, BUTTON_HALL_UP);
-    queue_create_new_order(3, BUTTON_HALL_DOWN);
-
-    util_queue_print();
-
-    queue_update();
-    queue_update();
-
-
-    util_queue_print_current_order();
-    util_queue_print_next_order();
-
-    global_previous_floor = global_elevator_current_floor;
-    global_elevator_current_floor += 1;
-
-    queue_remove_floor_orders(global_elevator_current_floor);
-
-    queue_create_new_order(0, BUTTON_CAB);
-
-    util_queue_print();
-
-    queue_update();
-
-    util_queue_print_current_order();
-    util_queue_print_next_order();
-
-
+   unit_test_queue_remove_floor_orders();
 }
