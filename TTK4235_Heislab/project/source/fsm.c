@@ -37,7 +37,7 @@ static transitions_t state_transitions[] = {
 volatile event_t event;
 stateMachine_t stateMachine; 
 
-static int elevator_current_floor = 2;
+static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
 static struct fsm_packet current_packet;
@@ -256,9 +256,7 @@ int util_fsm_values() {
 
 void fsm_entry() {
     queue_initalize();
-    queue_create_new_order(3, BUTTON_HALL_DOWN);
-    util_queue_print();
-   
+    event = stop_button_time_out;
     while(1) {
         volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
 
