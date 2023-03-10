@@ -6,7 +6,10 @@
 #include "../include/queue.h"
 #include "../include/fsm.h"
 
-int main(){    
+int main(){   
+    queue_initalize(); 
     fsm_entry();
+    //queue_simulate();
+
     return 0;
 }

@@ -17,6 +17,7 @@ typedef enum {
 
 // Transition events
 typedef enum {
+    no_event,
     order_up,
     order_down,
     valid_floor_in_queue,

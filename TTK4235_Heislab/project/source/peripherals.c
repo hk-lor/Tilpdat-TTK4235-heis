@@ -4,6 +4,7 @@
 #include "../source/driver/elevio.h"
 #include "../include/peripherals.h"
 #include "../include/elevator_panels.h"
+#include "../include/queue.h"
 
 // timer with seconds
 int peripherals_timer(int seconds) {
@@ -47,10 +48,10 @@ void peripherals_open_door_timer() {
 
 int peripherals_check_valid_floor() {
     if (elevio_floorSensor() != -1) {
-        return false;
+        return 1;
     }
     else {
-        return true;
+        return 1;
     }
 }
 
@@ -58,23 +59,24 @@ void peripherals_button_polling() {
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
             int btnPressed = elevio_callButton(f, b);
+
             if(btnPressed) {
                 elevio_buttonLamp(f, b, btnPressed);
-                queue_create_new_order(f, b);
-                }
+                //queue_create_new_order(f, b);
+            }
         }
     }
 };
 
 void peripherals_goto_floor_one() {
-    if (elevio_floorSensor < 1) {
-        while (elevio_floorSensor != 1) {
+    if (elevio_floorSensor() < 1) {
+        while (elevio_floorSensor() != 1) {
             elevio_motorDirection(DIRN_UP);
         }
         elevio_motorDirection(DIRN_STOP);
     }
     else {
-        while (elevio_floorSensor != 1) {
+        while (elevio_floorSensor() != 1) {
             elevio_motorDirection(DIRN_DOWN);
         }
         elevio_motorDirection(DIRN_STOP);
@@ -97,9 +99,6 @@ void peripherals_update_floor_lamp(int current_floor, uint8_t on_off) {
     }
 };
 
-void peripherals_check_queue() {
-    return;
-}
 
 void peripherals_update_current_order() {
     return;

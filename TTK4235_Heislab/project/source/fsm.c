@@ -34,10 +34,10 @@ static transitions_t state_transitions[] = {
 // Variables
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-static volatile event_t event;
-static stateMachine_t *stateMachine;
+volatile event_t event;
+stateMachine_t stateMachine; 
 
-static int elevator_current_floor;
+static int elevator_current_floor = 2;
 static struct order current_order;
 static struct order next_order;
 static struct fsm_packet current_packet;
@@ -47,22 +47,30 @@ static struct fsm_packet current_packet;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_init_enter() {
-    queue_initalize();
+    event = no_event;
+    printf("Queue initialize");
+    //queue_initalize();
     peripherals_goto_floor_one();
 };
 
 void fsm_idle_enter() {
+    printf("Idle enter! \n");
+    event = no_event;
     peripherals_open_door_timer();
     queue_remove_floor_orders(elevator_current_floor);    
 };
 
 void fsm_active_up_enter() {
+     printf("Active up enter!");
+    event = no_event;
     elevio_motorDirection(DIRN_UP);
 };
 void fsm_active_down_enter() {
+    event = no_event;
     elevio_motorDirection(DIRN_DOWN);
 };
 void fsm_stop_enter() {
+    event = no_event;
     update_stop_button(1);
     elevio_motorDirection(DIRN_STOP);
     queue_flush();
@@ -71,6 +79,7 @@ void fsm_stop_enter() {
     }
 };
 void fsm_valid_floor_check_enter() {
+    event = no_event;
     queue_remove_floor_orders(elevator_current_floor);
     current_packet = queue_update_fsm();
     fsm_update_state();
@@ -119,11 +128,11 @@ void fsm_valid_floor_check_exit() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_update_state() {
+    current_packet.current_order_dir = next_order.dir;
+    current_packet.current_order_floor = next_order.floor;
+
     current_packet.next_order_dir = current_order.dir ;
     current_packet.next_order_floor = current_order.floor;
-
-    current_packet.current_order_dir = next_order.dir;
-    current_packet.current_order_dir = next_order.floor;
 
     current_packet.elevator_current_floor = elevator_current_floor;
 }
@@ -135,7 +144,7 @@ void fsm_init_update() {
 }
 
 void fsm_idle_update() {
-    queue_update_fsm();
+    current_packet = queue_update_fsm();
     fsm_update_state();
 
     peripherals_button_polling();
@@ -157,7 +166,7 @@ void fsm_idle_update() {
 }
 
 void fsm_active_up_update() {
-    queue_update_fsm();
+    current_packet = queue_update_fsm();
     fsm_update_state();
 
     peripherals_button_polling();
@@ -177,7 +186,7 @@ void fsm_active_up_update() {
 }
 
 void fsm_active_down_update() {
-    queue_update_fsm();
+    current_packet = queue_update_fsm();
     fsm_update_state();
 
     peripherals_button_polling();
@@ -204,7 +213,7 @@ void fsm_stop_update() {
         return;
     }
     // if not stop button is pressed timeout and then event = stop_button_time_out
-    if (fetch_stop_button_status == 0) {
+    if (fetch_stop_button_status() == 0) {
         peripherals_timer(3);
         event = stop_button_time_out;
     }
@@ -217,25 +226,50 @@ void fsm_valid_floor_check_update() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+// FSM debugging
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+int util_fsm_print_current_order() {
+    printf("FSM: Current order: Floor %i dir %i \n", current_order.floor, current_order.dir);
+    return 0;
+};
+
+int util_fsm_print_next_order() {
+    printf("FSM: Next order: Floor %i dir %i \n", next_order.floor, next_order.dir);
+    return 0;
+};
+
+int util_fsm_values() {
+    printf("FSM: Current state: %i \n" , stateMachine.currState);
+    printf("FSM: Current Floor: %i \n", elevator_current_floor);
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // FSM entry
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_entry() {
+
+    queue_create_new_order(2, DIRN_DOWN);
+
     while(1) {
         volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
 
         // Transitions
         for (int i = 0; i < state_transitions_array_len; i++) {
-            if (stateMachine->currState == state_transitions[i].currState) {
+            if (stateMachine.currState == state_transitions[i].currState) {
                 if (event == state_transitions[i].event) {
                     // Transition to the next state
                     // Call the function associated with the exit transition
-                    (stateFunctionA[stateMachine->currState].exit_function)();
+                    (stateFunctionA[stateMachine.currState].exit_function)();
                     // Changing state
-                    stateMachine->currState = state_transitions[i].nextState;
+                    stateMachine.currState = state_transitions[i].nextState;
 
                     // Call the function associated with enter transition
-                    (stateFunctionA[stateMachine->currState].enter_function)();
+                    (stateFunctionA[stateMachine.currState].enter_function)();
+                    //event = no_event;
                     break;
                 }
             }
@@ -243,11 +277,17 @@ void fsm_entry() {
 
         // Update
         for (int i = 0; i < state_transitions_array_len; i++) {
-            if (stateMachine->currState == state_transitions[i].currState) {
-                (stateFunctionA[stateMachine->currState].update_function)();
+            if (stateMachine.currState == state_transitions[i].currState) {
+                (stateFunctionA[stateMachine.currState].update_function)();
                 break;
             }
         }
         peripherals_timer(1);
+        util_queue_print();
+        util_queue_print_current_order();
+        util_fsm_print_current_order();
+        //util_fsm_print_next_order();
+        //util_fsm_values();
+
     }
 }

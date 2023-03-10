@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "../source/driver/elevio.h"
 #include "../include/queue.h"
+#include "../include/elevator_panels.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue variables
@@ -27,7 +28,6 @@ int queue_initalize() {
     head = NULL;
     global_elevator_current_order.floor = -1;
     global_elevator_next_order.floor = -1;
-
    return 0;
 }
 
@@ -116,8 +116,6 @@ int queue_create_new_order(int floor, ButtonType dir) {
 }
 
 int queue_flush() {
-    int queue_not_empty = 1;
-
     struct order* order = NULL;
 
     for(int floor = 0; floor < N_FLOORS; floor++) {
@@ -139,10 +137,8 @@ void queue_remove_floor_orders(int floor) {
         floor_order = queue_search(floor);
         if(floor_order != NULL) {
             queue_delete(floor_order);
-            
         }
     }
-    queue_set_global_orders_as_empty();
 };
 
 // structs are statically allocated due to getting into trouble when using pointers
@@ -164,7 +160,7 @@ int queue_update_elevator_current_floor() {
     return 0;
 }
 
-struct order queue_update_fsm() {
+struct fsm_packet queue_update_fsm() {
     queue_update();
 
     struct fsm_packet packet; 
@@ -175,9 +171,10 @@ struct order queue_update_fsm() {
     packet.next_order_dir = global_elevator_next_order.dir;
     packet.next_order_floor = global_elevator_next_order.floor;
 
-    packet.current_floor = global_elevator_current_floor;
+    packet.elevator_current_floor = global_elevator_current_floor;
+
     
-    return fsm_packet;
+    return packet;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +223,6 @@ int queue_update() {
         }
 
     }
-    queue_update_fsm();
     return 0; 
 }
 
@@ -245,12 +241,12 @@ void queue_assign_next_global_order(struct order* order) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 int util_queue_print_current_order() {
-    printf("Current order: Floor %i dir %i \n", global_elevator_current_order.floor, global_elevator_current_order.dir);
+    printf("Queue Current order: Floor %i dir %i \n", global_elevator_current_order.floor, global_elevator_current_order.dir);
     return 0;
 };
 
 int util_queue_print_next_order() {
-    printf("Next order: Floor %i dir %i \n", global_elevator_next_order.floor, global_elevator_next_order.dir);
+    printf("Queue Next order: Floor %i dir %i \n", global_elevator_next_order.floor, global_elevator_next_order.dir);
     return 0;
 };
 
@@ -258,7 +254,7 @@ int util_print_order(struct order* order) {
     if(order == NULL) {
         return 1;
     } else {
-        printf("Order: Floor %i Direction %i \n", order->floor, order->dir);
+        printf("Queue Order: Floor %i Direction %i \n", order->floor, order->dir);
         return 0;
     }
 }
@@ -268,7 +264,7 @@ int util_queue_print() {
     struct order* order = head;
 
     while(order != NULL) {
-        printf("Order: %i Floor: %i \n", queue_index, order->floor);
+        printf("Queue: Order: %i Floor: %i \n", queue_index, order->floor);
         order = order->next;
         queue_index -= 1;
     }
@@ -436,5 +432,20 @@ void queue_scenario() {
 
 void queue_simulate() {
 
-   unit_test_queue_remove_floor_orders();
+    queue_initalize();
+
+    queue_create_new_order(1, BUTTON_HALL_DOWN); // Enter idle
+    queue_create_new_order(2, BUTTON_HALL_UP); // Enter idle
+    queue_create_new_order(3, BUTTON_HALL_UP); // Enter idle
+
+    util_queue_print();
+    util_queue_print_current_order();
+    util_queue_print_next_order();
+
+    queue_update();
+
+    util_queue_print();
+    util_queue_print_current_order();
+    util_queue_print_next_order();
+
 }
