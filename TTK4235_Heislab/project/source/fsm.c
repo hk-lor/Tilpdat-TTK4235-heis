@@ -61,15 +61,17 @@ void fsm_idle_enter() {
 };
 
 void fsm_active_up_enter() {
-     printf("Active up enter!");
+    printf("Active up enter!");
     event = no_event;
     elevio_motorDirection(DIRN_UP);
 };
 void fsm_active_down_enter() {
+    printf("Active down enter!");
     event = no_event;
     elevio_motorDirection(DIRN_DOWN);
 };
 void fsm_stop_enter() {
+    printf("Stop enter!");
     event = no_event;
     update_stop_button(1);
     elevio_motorDirection(DIRN_STOP);
@@ -79,9 +81,10 @@ void fsm_stop_enter() {
     }
 };
 void fsm_valid_floor_check_enter() {
+    printf("Valid floor check enter!");
     event = no_event;
     queue_remove_floor_orders(elevator_current_floor);
-    current_packet = queue_update_fsm();
+    queue_update_fsm(&current_packet);
     fsm_update_state();
 
     if(peripherals_check_valid_floor()) {
@@ -105,13 +108,13 @@ void fsm_idle_exit() {
 
 void fsm_active_up_exit() {
     queue_remove_floor_orders(elevator_current_floor);
-    current_packet = queue_update_fsm();    // update current_order, next_order, current_floor
+    queue_update_fsm(&current_packet);    // update current_order, next_order, current_floor
     fsm_update_state();
 }
 
 void fsm_active_down_exit() {
     queue_remove_floor_orders(elevator_current_floor);
-    current_packet = queue_update_fsm();
+    queue_update_fsm(&current_packet);
     fsm_update_state();
 }
 
@@ -128,11 +131,12 @@ void fsm_valid_floor_check_exit() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_update_state() {
-    current_packet.current_order_dir = next_order.dir;
-    current_packet.current_order_floor = next_order.floor;
 
-    current_packet.next_order_dir = current_order.dir ;
-    current_packet.next_order_floor = current_order.floor;
+    current_order.dir =current_packet.current_order_dir;
+    current_order.floor = current_packet.current_order_floor;
+
+    next_order.dir = current_packet.next_order_dir;
+    next_order.floor = current_packet.next_order_floor;
 
     current_packet.elevator_current_floor = elevator_current_floor;
 }
@@ -144,7 +148,7 @@ void fsm_init_update() {
 }
 
 void fsm_idle_update() {
-    current_packet = queue_update_fsm();
+    queue_update_fsm(&current_packet);
     fsm_update_state();
 
     peripherals_button_polling();
@@ -166,7 +170,7 @@ void fsm_idle_update() {
 }
 
 void fsm_active_up_update() {
-    current_packet = queue_update_fsm();
+    queue_update_fsm(&current_packet);
     fsm_update_state();
 
     peripherals_button_polling();
@@ -186,7 +190,7 @@ void fsm_active_up_update() {
 }
 
 void fsm_active_down_update() {
-    current_packet = queue_update_fsm();
+    queue_update_fsm(&current_packet);
     fsm_update_state();
 
     peripherals_button_polling();
@@ -251,9 +255,10 @@ int util_fsm_values() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_entry() {
-
-    queue_create_new_order(2, DIRN_DOWN);
-
+    queue_initalize();
+    queue_create_new_order(3, BUTTON_HALL_DOWN);
+    util_queue_print();
+   
     while(1) {
         volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
 
@@ -283,11 +288,9 @@ void fsm_entry() {
             }
         }
         peripherals_timer(1);
-        util_queue_print();
-        util_queue_print_current_order();
+        
         util_fsm_print_current_order();
-        //util_fsm_print_next_order();
-        //util_fsm_values();
-
+        util_fsm_print_next_order();
+        util_fsm_values();
     }
 }

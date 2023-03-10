@@ -7,7 +7,7 @@
 #include "../include/fsm.h"
 
 int main(){   
-    queue_initalize(); 
+    
     fsm_entry();
     //queue_simulate();
 

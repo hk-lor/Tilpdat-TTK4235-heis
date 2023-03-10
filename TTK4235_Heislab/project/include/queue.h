@@ -38,7 +38,7 @@ void queue_set_global_orders_as_empty();
 
 // Functions for external modules
 int queue_update_elevator_current_floor();
-struct fsm_packet queue_update_fsm();
+void queue_update_fsm();
 
 // Debugging utils
 int util_print_order(struct order* order);
@@ -48,4 +48,3 @@ int util_queue_print_next_order();
 
 // Testing
 void queue_simulate();
-

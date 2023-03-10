@@ -48,7 +48,7 @@ void peripherals_open_door_timer() {
 
 int peripherals_check_valid_floor() {
     if (elevio_floorSensor() != -1) {
-        return 1;
+        return 0;
     }
     else {
         return 1;
@@ -60,9 +60,9 @@ void peripherals_button_polling() {
         for(int b = 0; b < N_BUTTONS; b++){
             int btnPressed = elevio_callButton(f, b);
 
-            if(btnPressed) {
+            if(btnPressed == 1) {
                 elevio_buttonLamp(f, b, btnPressed);
-                //queue_create_new_order(f, b);
+                queue_create_new_order(f, b);
             }
         }
     }
@@ -99,11 +99,39 @@ void peripherals_update_floor_lamp(int current_floor, uint8_t on_off) {
     }
 };
 
+// Possible new
+void peripherals_update_floor_lamp2(int current_floor) {
+    switch(current_floor) {
+        case 1: 
+            update_floor_lamp_1(1);
+            update_floor_lamp_2(0);
+            update_floor_lamp_3(0);
+            update_floor_lamp_4(0);
+            break;
+        case 2:
+            update_floor_lamp_1(0);
+            update_floor_lamp_2(1);
+            update_floor_lamp_3(0);
+            update_floor_lamp_4(0);
+            break;
+        case 3:
+            update_floor_lamp_1(0);
+            update_floor_lamp_2(0);
+            update_floor_lamp_3(1);
+            update_floor_lamp_4(0);
+            break;
+        case 4:
+            update_floor_lamp_1(0);
+            update_floor_lamp_2(0);
+            update_floor_lamp_3(0);
+            update_floor_lamp_4(1);
+    }
+};
+
 
 void peripherals_update_current_order() {
     return;
 }
 
 void peripherals_start_stop_timer() {
-    
 };

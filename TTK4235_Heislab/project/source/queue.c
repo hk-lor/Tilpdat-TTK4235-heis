@@ -160,21 +160,14 @@ int queue_update_elevator_current_floor() {
     return 0;
 }
 
-struct fsm_packet queue_update_fsm() {
+void queue_update_fsm(struct fsm_packet* packet) {
     queue_update();
 
-    struct fsm_packet packet; 
-
-    packet.current_order_dir = global_elevator_current_order.dir;
-    packet.current_order_floor = global_elevator_current_order.floor;
-
-    packet.next_order_dir = global_elevator_next_order.dir;
-    packet.next_order_floor = global_elevator_next_order.floor;
-
-    packet.elevator_current_floor = global_elevator_current_floor;
-
-    
-    return packet;
+    packet->current_order_dir = global_elevator_current_order.dir;
+    packet->current_order_floor = global_elevator_current_order.floor;
+    packet->next_order_dir = global_elevator_next_order.dir;
+    packet->next_order_floor = global_elevator_next_order.floor;
+    packet->elevator_current_floor = global_elevator_current_floor;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,6 +264,7 @@ int util_queue_print() {
     printf("--------------------- \n");
     return 0;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue unit tests / simulation
