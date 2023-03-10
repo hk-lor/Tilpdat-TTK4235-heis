@@ -51,6 +51,7 @@ void fsm_init_enter() {
     printf("Queue initialize");
     //queue_initalize();
     peripherals_goto_floor_one();
+    event = state_found;
 };
 
 void fsm_idle_enter() {
@@ -142,9 +143,7 @@ void fsm_update_state() {
 }
 
 void fsm_init_update() {
-    if (peripherals_check_valid_floor()) {
-        event = state_found;
-    }
+    return;
 }
 
 void fsm_idle_update() {
@@ -255,8 +254,8 @@ int util_fsm_values() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_entry() {
-    queue_initalize();
-    event = stop_button_time_out;
+    fsm_init_enter();
+    
     while(1) {
         volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
 
