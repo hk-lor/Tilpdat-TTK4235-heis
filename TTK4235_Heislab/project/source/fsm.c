@@ -50,6 +50,7 @@ static struct fsm_packet current_packet;
 void fsm_init_enter() {
     event = no_event;
     printf("Queue initialize");
+    init_lights();
     //queue_initalize();
     peripherals_goto_floor_one();
     event = state_found;
@@ -255,7 +256,6 @@ int util_fsm_values() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_entry() {
-    init_lights();
     fsm_init_enter();
     
     while(1) {
