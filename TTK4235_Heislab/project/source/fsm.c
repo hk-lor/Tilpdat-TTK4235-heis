@@ -113,12 +113,14 @@ void fsm_active_up_exit() {
     queue_remove_floor_orders(elevator_current_floor);
     queue_update_fsm(&current_packet);    // update current_order, next_order, current_floor
     fsm_update_state();
+    elevio_motorDirection(DIRN_STOP);
 }
 
 void fsm_active_down_exit() {
     queue_remove_floor_orders(elevator_current_floor);
     queue_update_fsm(&current_packet);
     fsm_update_state();
+    elevio_motorDirection(DIRN_STOP);
 }
 
 void fsm_stop_exit() {
@@ -158,10 +160,10 @@ void fsm_idle_update() {
     // event for either going up or down
     if (current_order.dir != -1) {
         if (current_order.floor > elevator_current_floor) {
-            event = order_down;
+            event = order_up;
         }
         if (current_order.floor < elevator_current_floor) {
-            event = order_up;
+            event = order_down;
         }
     }
     // event for stop button
@@ -257,8 +259,7 @@ int util_fsm_values() {
 
 void fsm_entry() {
     fsm_init_enter();
-    
-    queue_create_new_order(1,2);
+
     while(1) {
         volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
 
