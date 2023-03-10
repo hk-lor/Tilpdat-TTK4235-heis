@@ -59,7 +59,7 @@ void peripherals_button_polling() {
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
             int btnPressed = elevio_callButton(f, b);
-            printf("BUTTONPRESSED %i \n");
+            
             if(btnPressed == 1) {
                 elevio_buttonLamp(f, b, btnPressed);
                 queue_create_new_order(f, b);

@@ -2,6 +2,7 @@
 #include "../include/peripherals.h"
 #include "../source/driver/elevio.h"
 #include "../include/queue.h"
+#include "../include/elevator_panels.h"
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,6 +255,7 @@ int util_fsm_values() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void fsm_entry() {
+    init_lights();
     fsm_init_enter();
     
     while(1) {

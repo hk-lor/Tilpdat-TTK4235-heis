@@ -5,6 +5,9 @@
 
 #include "../source/driver/elevio.h"
 
+// Init
+void init_lights();
+
 // Heisdør
 void open_door();
 void close_door();
