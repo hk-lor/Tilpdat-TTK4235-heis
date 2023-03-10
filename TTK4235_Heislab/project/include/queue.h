@@ -10,6 +10,14 @@ struct order {
     struct order* prev;
 };
 
+struct fsm_packet {
+    int current_order_dir;
+    int current_order_floor;
+    int next_order_dir;
+    int next_order_floor;
+    int elevator_current_floor;
+};
+
 // Basic operations 
 int queue_update();
 int queue_insert(struct order* new_order);
@@ -23,21 +31,21 @@ struct order* queue_search(int floor);
 struct order* queue_fetch_latest_order();
 struct order* queue_fetch_order(int i);
 
+// Queue Algorithm functions
 void queue_assign_current_global_order(struct order* order);
 void queue_assign_next_global_order(struct order* order);
 void queue_set_global_orders_as_empty();
 
-// Fetch from elevio.h
+// Functions for external modules
 int queue_update_elevator_current_floor();
+struct fsm_packet queue_update_fsm();
 
-// Update FSM
-int queue_update_fsm();
-
-// debugging utils
+// Debugging utils
 int util_print_order(struct order* order);
 int util_queue_print_current_order();
 int util_queue_print();
 int util_queue_print_next_order();
 
+// Testing
 void queue_simulate();
 

@@ -40,6 +40,7 @@ static stateMachine_t *stateMachine;
 static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
+static struct fsm_packet current_packet;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Enter functions
@@ -47,13 +48,14 @@ static struct order next_order;
 
 void fsm_init_enter() {
     queue_initalize();
-    goto_floor_one();
+    peripherals_goto_floor_one();
 };
 
 void fsm_idle_enter() {
-    update_state();
-    open_door_timer();
+    peripherals_open_door_timer();
+    queue_remove_floor_orders(elevator_current_floor);    
 };
+
 void fsm_active_up_enter() {
     elevio_motorDirection(DIRN_UP);
 };
@@ -61,16 +63,22 @@ void fsm_active_down_enter() {
     elevio_motorDirection(DIRN_DOWN);
 };
 void fsm_stop_enter() {
+    update_stop_button(1);
     elevio_motorDirection(DIRN_STOP);
-    start_stop_timer();
     queue_flush();
-    update_state();
+    if (peripherals_check_valid_floor()) {
+        peripherals_open_door_timer();
+    }
 };
 void fsm_valid_floor_check_enter() {
-    if(update_state() == NULL) {
-        init_enter();
+    queue_remove_floor_orders(elevator_current_floor);
+    current_packet = queue_update_fsm();
+    fsm_update_state();
+
+    if(peripherals_check_valid_floor()) {
+        fsm_idle_enter();
     } else {
-        idle_enter();
+        fsm_init_enter();
     }
 };
 
@@ -87,18 +95,19 @@ void fsm_idle_exit() {
 }
 
 void fsm_active_up_exit() {
-    peripherals_remove_current_orders(elevator_current_floor);
-    // update current_order, next_order
-    elevio_floorIndicator(elevator_current_floor);
+    queue_remove_floor_orders(elevator_current_floor);
+    current_packet = queue_update_fsm();    // update current_order, next_order, current_floor
+    fsm_update_state();
 }
 
 void fsm_active_down_exit() {
-    peripherals_remove_current_order(elevator_current_floor);
-    elevio_floorIndicator(elevator_current_floor);
+    queue_remove_floor_orders(elevator_current_floor);
+    current_packet = queue_update_fsm();
+    fsm_update_state();
 }
 
 void fsm_stop_exit() {
-    return;
+    update_stop_button(0);
 }
 
 void fsm_valid_floor_check_exit() {
@@ -109,46 +118,136 @@ void fsm_valid_floor_check_exit() {
 // Update functions
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+void fsm_update_state() {
+    current_packet.next_order_dir = current_order.dir ;
+    current_packet.next_order_floor = current_order.floor;
+
+    current_packet.current_order_dir = next_order.dir;
+    current_packet.current_order_dir = next_order.floor;
+
+    current_packet.elevator_current_floor = elevator_current_floor;
+}
+
 void fsm_init_update() {
-    return;
+    if (peripherals_check_valid_floor()) {
+        event = state_found;
+    }
 }
 
 void fsm_idle_update() {
-    //check_queue
-    fsm_button_polling();
-    check_obstruction();
+    queue_update_fsm();
+    fsm_update_state();
+
+    peripherals_button_polling();
+    peripherals_check_obstruction();
+
+    // event for either going up or down
+    if (current_order.dir != -1) {
+        if (current_order.floor > elevator_current_floor) {
+            event = order_up;
+        }
+        if (current_order.floor < elevator_current_floor) {
+            event = order_down;
+        }
+    }
+    // event for stop button
+    if (fetch_stop_button_status() == 1) {
+        event = stop_button_pressed;
+    }
 }
 
 void fsm_active_up_update() {
-    //check_queue
-    fsm_button_polling();
-    //update_state
-    //update_destination_floor
+    queue_update_fsm();
+    fsm_update_state();
+
+    peripherals_button_polling();
+    peripherals_update_floor_lamp(elevator_current_floor, 1);
 
     int valid_floor = peripherals_check_valid_floor();
     if(valid_floor) {
         elevator_current_floor = valid_floor;
+        if (current_order.floor == elevator_current_floor) {
+            event = valid_floor_in_queue;
+        }
+    }
+
+    if (fetch_stop_button_status()) {
+        event = stop_button_pressed;
     }
 }
 
 void fsm_active_down_update() {
-    //check_queue
+    queue_update_fsm();
+    fsm_update_state();
+
     peripherals_button_polling();
-    //update_destination_floor
+    peripherals_update_floor_lamp(elevator_current_floor, 1);
+    
     int valid_floor = peripherals_check_valid_floor();
     if(valid_floor) {
         elevator_current_floor = valid_floor;
+        if (current_order.floor == elevator_current_floor) {
+            event = valid_floor_in_queue;
+        }
+    }
+
+    if (fetch_stop_button_status()) {
+        event = stop_button_pressed;
     }
 }
 void fsm_stop_update() {
     peripherals_button_polling();
-    if (peripheralscheck_valid_floor() != -1 && check_obstruction() == 0) {
-        open_door_timer();
+    if (peripherals_check_valid_floor() != 1 && peripherals_check_obstruction() == 0) {
+        peripherals_open_door_timer();
     }
     else {
         return;
     }
+    // if not stop button is pressed timeout and then event = stop_button_time_out
+    if (fetch_stop_button_status == 0) {
+        peripherals_timer(3);
+        event = stop_button_time_out;
+    }
 }
 void fsm_valid_floor_check_update() {
     return;
+    if (peripherals_check_valid_floor()) {
+        event = state_found;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// FSM entry
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void fsm_entry() {
+    while(1) {
+        volatile int state_transitions_array_len = sizeof(state_transitions)/sizeof(state_transitions[0]);
+
+        // Transitions
+        for (int i = 0; i < state_transitions_array_len; i++) {
+            if (stateMachine->currState == state_transitions[i].currState) {
+                if (event == state_transitions[i].event) {
+                    // Transition to the next state
+                    // Call the function associated with the exit transition
+                    (stateFunctionA[stateMachine->currState].exit_function)();
+                    // Changing state
+                    stateMachine->currState = state_transitions[i].nextState;
+
+                    // Call the function associated with enter transition
+                    (stateFunctionA[stateMachine->currState].enter_function)();
+                    break;
+                }
+            }
+        }
+
+        // Update
+        for (int i = 0; i < state_transitions_array_len; i++) {
+            if (stateMachine->currState == state_transitions[i].currState) {
+                (stateFunctionA[stateMachine->currState].update_function)();
+                break;
+            }
+        }
+        peripherals_timer(1);
+    }
 }

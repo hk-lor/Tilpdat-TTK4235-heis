@@ -4,8 +4,9 @@
 #include <time.h>
 #include "driver/elevio.h"
 #include "../include/queue.h"
+#include "../include/fsm.h"
 
 int main(){    
-    queue_simulate();
+    fsm_entry();
     return 0;
 }

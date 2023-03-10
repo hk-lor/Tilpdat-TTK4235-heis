@@ -3,15 +3,49 @@
 #include "time.h"
 #include "../source/driver/elevio.h"
 #include "../include/peripherals.h"
+#include "../include/elevator_panels.h"
 
+// timer with seconds
+int peripherals_timer(int seconds) {
+    int *count = malloc(sizeof(int));
+    if (count == NULL) {
+        return 1;
+    }
 
-void peripherals_open_door_timer(int floor) {
-    elevio_doorOpenLamp(floor);
-    peripherals_timer_3seconds();
-    elevio_doorOpenLamp(floor);
+    *count = 0;
+
+    clock_t start_time = clock();
+    double elapsed_time;
+
+    while (*count < seconds) {
+        elapsed_time = (double)(clock() - start_time) / CLOCKS_PER_SEC;
+        if (elapsed_time >= 1.0) {
+            (*count)++;
+            start_time = clock();
+        }
+    }
+
+    free(count);
+    count = NULL;
+
+    return 0;
 }
 
-bool peripherals_check_valid_floor() {
+int peripherals_check_obstruction() {
+    return elevio_obstruction();
+};
+
+// Open door
+void peripherals_open_door_timer() {
+    if (peripherals_check_obstruction() == 1) {
+        return;
+    }
+    open_door();
+    peripherals_timer(3);
+    close_door();
+}
+
+int peripherals_check_valid_floor() {
     if (elevio_floorSensor() != -1) {
         return false;
     }
@@ -22,22 +56,14 @@ bool peripherals_check_valid_floor() {
 
 void peripherals_button_polling() {
     for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-                if(btnPressed) {
-                    elevio_buttonLamp(f, b, btnPressed);
-                    queue_create_new_order(f, b);
+        for(int b = 0; b < N_BUTTONS; b++){
+            int btnPressed = elevio_callButton(f, b);
+            if(btnPressed) {
+                elevio_buttonLamp(f, b, btnPressed);
+                queue_create_new_order(f, b);
                 }
-         }
+        }
     }
-};
-
-bool peripherals_check_obstruction() {
-    return elevio_obstruction();
-};
-
-void peripherals_update_state() {
-    
 };
 
 void peripherals_goto_floor_one() {
@@ -55,8 +81,20 @@ void peripherals_goto_floor_one() {
     }
 }
 
-void peripherals_remove_floor_orders(int floor) {
-    queue_remove_floor_orders(floor);
+void peripherals_update_floor_lamp(int current_floor, uint8_t on_off) {
+    switch(current_floor) {
+        case 1: 
+            update_floor_lamp_1(on_off);
+            break;
+        case 2:
+            update_floor_lamp_2(on_off);
+            break;
+        case 3:
+            update_floor_lamp_3(on_off);
+            break;
+        case 4:
+            update_floor_lamp_4(on_off);
+    }
 };
 
 void peripherals_check_queue() {
@@ -67,27 +105,6 @@ void peripherals_update_current_order() {
     return;
 }
 
-int peripherals_timer_3seconds() {
-    int *count = malloc(sizeof(int));
-    if (count == NULL) {
-        return 1;
-    }
-
-    *count = 0;
-
-    clock_t start_time = clock();
-    double elapsed_time;
-
-    while (*count < 3) {
-        elapsed_time = (double)(clock() - start_time) / CLOCKS_PER_SEC;
-        if (elapsed_time >= 1.0) {
-            (*count)++;
-            start_time = clock();
-        }
-    }
-
-    free(count);
-    count = NULL;
-
-    return 0;
-}
+void peripherals_start_stop_timer() {
+    
+};

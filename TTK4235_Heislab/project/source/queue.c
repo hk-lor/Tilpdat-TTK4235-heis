@@ -27,6 +27,7 @@ int queue_initalize() {
     head = NULL;
     global_elevator_current_order.floor = -1;
     global_elevator_next_order.floor = -1;
+
    return 0;
 }
 
@@ -138,10 +139,10 @@ void queue_remove_floor_orders(int floor) {
         floor_order = queue_search(floor);
         if(floor_order != NULL) {
             queue_delete(floor_order);
+            
         }
     }
     queue_set_global_orders_as_empty();
-
 };
 
 // structs are statically allocated due to getting into trouble when using pointers
@@ -163,9 +164,20 @@ int queue_update_elevator_current_floor() {
     return 0;
 }
 
-int queue_update_fsm() {
-    // send global_elevator_current_order, global_elevator_next_order, and current floor to FSM
-    return 0;
+struct order queue_update_fsm() {
+    queue_update();
+
+    struct fsm_packet packet; 
+
+    packet.current_order_dir = global_elevator_current_order.dir;
+    packet.current_order_floor = global_elevator_current_order.floor;
+
+    packet.next_order_dir = global_elevator_next_order.dir;
+    packet.next_order_floor = global_elevator_next_order.floor;
+
+    packet.current_floor = global_elevator_current_floor;
+    
+    return fsm_packet;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,12 +185,14 @@ int queue_update_fsm() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 int queue_update() {
-    
+    queue_update_elevator_current_floor();
+
     for (int i = 0; i < queue_length; ++i) {
 
         struct order* order = queue_fetch_order(i);
 
         if(order == NULL && queue_length == 0) {
+            queue_set_global_orders_as_empty();
             return 1;
         } 
         else {
