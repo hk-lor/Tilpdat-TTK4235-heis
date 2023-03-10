@@ -7,7 +7,7 @@
 #include "../include/fsm.h"
 
 int main(){   
-    
+    elevio_init();
     fsm_entry();
     //queue_simulate();
 

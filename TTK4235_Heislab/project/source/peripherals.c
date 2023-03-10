@@ -69,13 +69,7 @@ void peripherals_button_polling() {
 };
 
 void peripherals_goto_floor_one() {
-    if (elevio_floorSensor() < 1) {
-        while (elevio_floorSensor() != 0) {
-            elevio_motorDirection(DIRN_UP);
-        }
-        elevio_motorDirection(DIRN_STOP);
-    }
-    else {
+    if (elevio_floorSensor() != 0) {
         while (elevio_floorSensor() != 0) {
             elevio_motorDirection(DIRN_DOWN);
         }
