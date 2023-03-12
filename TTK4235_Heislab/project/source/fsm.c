@@ -65,9 +65,7 @@ void fsm_idle_enter()
     printf("Idle enter! \n");
     event = no_event;
     peripherals_open_door_timer();
-    printf("opendoor timer done \n");
     queue_remove_floor_orders(elevator_current_floor);
-    printf("queue remove floor orders \n");
 };
 
 void fsm_active_up_enter()
@@ -89,7 +87,7 @@ void fsm_stop_enter()
     update_stop_button(1);
     elevio_motorDirection(DIRN_STOP);
     queue_flush();
-    if (peripherals_check_valid_floor() != 1) {
+    if (peripherals_check_valid_floor() == 0) {
         peripherals_open_door_timer();
     }
 };
@@ -257,7 +255,7 @@ void fsm_stop_update()
         update_stop_button(0);
         event = stop_button_time_out;
     }
-    if (peripherals_check_valid_floor() != 1)
+    if (peripherals_check_valid_floor() == 0)
     {
         open_door();
     }
@@ -271,11 +269,13 @@ void fsm_stop_update()
 
 void fsm_valid_floor_check_update()
 {
-    return;
-    if (peripherals_check_valid_floor())
+    //printf("VALID FLOOR UPDATE \n");
+    if (peripherals_check_valid_floor() == 0)
     {
         event = state_found;
     }
+    
+    return;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -340,7 +340,7 @@ void fsm_entry()
             if (stateMachine.currState == state_transitions[i].currState)
             {
                 (stateFunctionA[stateMachine.currState].update_function)();
-                printf("update function commence \n");
+                // printf("update function commence \n");
                 break;
             }
         }
