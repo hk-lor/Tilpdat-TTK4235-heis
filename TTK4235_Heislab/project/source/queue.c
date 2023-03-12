@@ -317,14 +317,12 @@ int queue_update() {
     queue_update_elevator_current_floor();
 
     for (int i = 0; i < queue_length; ++i) {
-
         struct order* order = queue_fetch_order(i);
 
         if(order == NULL && queue_length == 0) {
             queue_set_global_orders_as_empty();
             return 1;
         } 
-
         else {
             if(global_elevator_current_order.floor == -1) {         // Check if current_order is empty
                 queue_assign_current_global_order(order);
@@ -334,24 +332,28 @@ int queue_update() {
             }
             
             else if(order->dir == BUTTON_CAB) {
+                // printf("CABIN \n");
                 int previous_dir = global_elevator_current_floor - global_previous_floor;
                 int future_dir = order->floor - global_elevator_current_floor;
-                if( (previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if order cab direction matches previous (Negative = down, positive = up)
+                if((previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if order cab direction matches previous (Negative = down, positive = up)
                     queue_assign_next_global_order(&global_elevator_current_order);
                     queue_assign_current_global_order(order);
                 }
-
-            } else if(order->dir == global_elevator_current_order.dir) {        // Determines if we need to do stops along the way
-                if(order->dir == DIRN_UP) {
+            }
+            else {        // Determines if we need to do stops along the way
+                if(order->dir == BUTTON_HALL_UP) {
+                    // printf("DIR UP \n");
                     if(order->floor < global_elevator_current_order.floor) {
                         queue_assign_next_global_order(&global_elevator_current_order);
                         queue_assign_current_global_order(order);
                     }
-                else if(order->dir == DIRN_DOWN) {
-                    if(order->floor > global_elevator_current_order.floor) {
+                }
+        
+                if(order->dir == BUTTON_HALL_DOWN) {
+                    // printf("DIR DOWN \n");
+                    if(order->floor >  global_elevator_current_order.floor) {
                         queue_assign_next_global_order(&global_elevator_current_order);
                         queue_assign_current_global_order(order);
-                        }
                     }
                 }
             }
@@ -402,7 +404,7 @@ int util_queue_print() {
     struct order* order = head;
 
     while(order != NULL) {
-        printf("Queue: Order: %i Floor: %i \n", queue_index, order->floor);
+        printf("Queue: Order: %i Floor: %i Direction: %i \n", queue_index, order->floor, order->dir);
         order = order->next;
         queue_index -= 1;
     }
