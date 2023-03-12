@@ -41,9 +41,6 @@ void elevio_init(void){
     send(sockfd, (char[4]){0}, 4, 0);
 }
 
-
-
-
 void elevio_motorDirection(MotorDirection dirn){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){1, dirn}, 4, 0);

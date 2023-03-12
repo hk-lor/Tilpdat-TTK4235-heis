@@ -47,27 +47,26 @@ void close_door() {
 void update_button_elevator_1(uint8_t button_value) {
     if(button_elevator_1 != button_value) {
         button_elevator_1 = button_value;
-        elevio_callButton(0, BUTTON_CAB);
+        elevio_buttonLamp(0, BUTTON_CAB, button_value);
     }
 };
 void update_button_elevator_2(uint8_t button_value) {
     if(button_elevator_2 != button_value) {
         button_elevator_2 = button_value;
-        elevio_callButton(1, BUTTON_CAB);
-
+        elevio_buttonLamp(1, BUTTON_CAB, button_value);
     }
 };
 void update_button_elevator_3(uint8_t button_value) {
     if(button_elevator_3 != button_value) {
         button_elevator_3 = button_value;
-        elevio_callButton(2, BUTTON_CAB);
+        elevio_buttonLamp(2, BUTTON_CAB, button_value);
+
     }
 };
 void update_button_elevator_4(uint8_t button_value) {
     if(button_elevator_4 != button_value) {
         button_elevator_4 = button_value;
-        elevio_callButton(3, BUTTON_CAB);
-
+        elevio_buttonLamp(3, BUTTON_CAB, button_value);
     }
 };
 

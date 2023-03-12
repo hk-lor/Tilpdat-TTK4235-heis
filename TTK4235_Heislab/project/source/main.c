@@ -5,11 +5,12 @@
 #include "driver/elevio.h"
 #include "../include/queue.h"
 #include "../include/fsm.h"
+#include "../include/peripherals.h"
 
 int main(){   
-    // elevio_init();
+    elevio_init();
+
     fsm_entry();
-    //queue_simulate();
 
     return 0;
 }

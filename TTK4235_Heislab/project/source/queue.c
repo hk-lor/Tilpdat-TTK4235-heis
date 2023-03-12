@@ -14,8 +14,8 @@
 static struct order* head;                      // Linked list queue head
 static int queue_length = 0;
 
-static int global_elevator_current_floor = 0;
-static int global_previous_floor = 0;
+static int global_elevator_current_floor ;
+static int global_previous_floor;
 
 static struct order global_elevator_current_order;
 static struct order global_elevator_next_order;
@@ -28,7 +28,7 @@ int queue_initalize() {
     head = NULL;
     global_elevator_current_order.floor = -1;
     global_elevator_next_order.floor = -1;
-   return 0;
+    return 0;
 }
 
 int queue_insert(struct order* new_order) {
@@ -45,6 +45,53 @@ int queue_insert(struct order* new_order) {
     head->prev = NULL;
 
     queue_length += 1;
+
+    switch(new_order->floor) {
+            case 0:
+                if(new_order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_1_up(1);
+                }
+                else if(new_order->dir == BUTTON_HALL_DOWN){
+                    // Down button does not exist
+                }
+                else {
+                    update_button_elevator_1(1);
+                }
+                break;
+            case 1:
+                if(new_order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_2_up(1);
+                }
+                else if(new_order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_2_down(1);
+                }
+                else {
+                    update_button_elevator_2(1);
+                }
+                break;
+             case 2:
+                if(new_order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_3_up(1);
+                }
+                else if(new_order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_3_down(1);
+                }
+                else {
+                    update_button_elevator_3(1);
+                }
+                break;
+             case 3:
+                if(new_order->dir == BUTTON_HALL_UP) {
+                    // UP button does not exist
+                }
+                else if(new_order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_4_down(1);
+                }
+                else {
+                    update_button_elevator_4(1);
+                }
+                break;
+        }
 
     return 0;
 }
@@ -65,6 +112,53 @@ int queue_delete(struct order* order) {
     }
 
     if(order != NULL) {
+        switch(order->floor) {
+            case 0:
+                if(order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_1_up(0);
+                }
+                else if(order->dir == BUTTON_HALL_DOWN){
+                    // Down button does not exist
+                }
+                else {
+                    update_button_elevator_1(0);
+                }
+                break;
+            case 1:
+                if(order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_2_up(0);
+                }
+                else if(order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_2_down(0);
+                }
+                else {
+                    update_button_elevator_2(0);
+                }
+                break;
+             case 2:
+                if(order->dir == BUTTON_HALL_UP) {
+                    update_floor_button_3_up(0);
+                }
+                else if(order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_3_down(0);
+                }
+                else {
+                    update_button_elevator_3(0);
+                }
+                break;
+             case 3:
+                if(order->dir == BUTTON_HALL_UP) {
+                    // UP button does not exist
+                }
+                else if(order->dir == BUTTON_HALL_DOWN){
+                    update_floor_button_4_down(0);
+                }
+                else {
+                    update_button_elevator_4(0);
+                }
+                break;
+        }
+
         free(order);
         queue_length -= 1;
     }
@@ -139,6 +233,9 @@ void queue_remove_floor_orders(int floor) {
             queue_delete(floor_order);
         }
     }
+    queue_set_global_current_order_as_empty();
+    queue_assign_current_global_order(&global_elevator_next_order);
+    queue_set_global_next_order_as_empty();
 };
 
 // structs are statically allocated due to getting into trouble when using pointers
@@ -147,15 +244,54 @@ void queue_set_global_orders_as_empty() {
     global_elevator_next_order.floor = -1;
 }
 
+void queue_set_global_next_order_as_empty() {
+    global_elevator_next_order.floor = -1;
+}
+
+void queue_set_global_current_order_as_empty() {
+    global_elevator_current_order.floor = -1;
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue external module function calls
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 int queue_update_elevator_current_floor() {
-    int elevator_current_floor = elevio_floorSensor();
-    if(elevator_current_floor != -1) {
+    int elevator_current_floor = elevio_floorSensor(); 
+    if(elevator_current_floor != -1) { // Updates only if floor is valid
+         switch(global_previous_floor) {
+            case 0:
+                update_floor_lamp_1(0);
+                break;
+            case 1:
+                update_floor_lamp_2(0);
+                break;
+            case 2:
+                update_floor_lamp_3(0);
+                break;
+            case 3:
+                update_floor_lamp_4(0);
+                break;
+        }
+
         global_previous_floor = global_elevator_current_floor;
         global_elevator_current_floor = elevator_current_floor;
+
+        switch(elevator_current_floor) {
+            case 0:
+                update_floor_lamp_1(1);
+                break;
+            case 1:
+                update_floor_lamp_2(1);
+                break;
+            case 2:
+                update_floor_lamp_3(1);
+                break;
+            case 3:
+                update_floor_lamp_4(1);
+                break;
+        }
     }
     return 0;
 }
@@ -167,6 +303,7 @@ void queue_update_fsm(struct fsm_packet* packet) {
     packet->current_order_floor = global_elevator_current_order.floor;
     packet->next_order_dir = global_elevator_next_order.dir;
     packet->next_order_floor = global_elevator_next_order.floor;
+
     packet->elevator_current_floor = global_elevator_current_floor;
 }
 
@@ -185,13 +322,16 @@ int queue_update() {
             queue_set_global_orders_as_empty();
             return 1;
         } 
+
         else {
             if(global_elevator_current_order.floor == -1) {         // Check if current_order is empty
                 queue_assign_current_global_order(order);
 
-            } else if(global_elevator_next_order.floor == -1) {     // Check if next_order is empty
+            } else if (global_elevator_next_order.floor == -1) {     // Check if next_order is empty
                 queue_assign_next_global_order(order);
-            } else if(order->dir == BUTTON_CAB) {
+            }
+            
+            else if(order->dir == BUTTON_CAB) {
                 int previous_dir = global_elevator_current_floor - global_previous_floor;
                 int future_dir = order->floor - global_elevator_current_floor;
                 if( (previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if order cab direction matches previous (Negative = down, positive = up)
@@ -214,7 +354,6 @@ int queue_update() {
                 }
             }
         }
-
     }
     return 0; 
 }
@@ -250,6 +389,10 @@ int util_print_order(struct order* order) {
         printf("Queue Order: Floor %i Direction %i \n", order->floor, order->dir);
         return 0;
     }
+}
+
+void util_print_current_floor() {
+    printf("QUEUE: Current floor: %i \n", global_elevator_current_floor);
 }
 
 int util_queue_print() {

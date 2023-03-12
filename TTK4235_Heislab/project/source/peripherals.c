@@ -38,9 +38,6 @@ int peripherals_check_obstruction() {
 
 // Open door
 void peripherals_open_door_timer() {
-    if (peripherals_check_obstruction() == 1) {
-        return;
-    }
     open_door();
     peripherals_timer(3);
     close_door();
@@ -79,16 +76,16 @@ void peripherals_goto_floor_one() {
 
 void peripherals_update_floor_lamp(int current_floor, uint8_t on_off) {
     switch(current_floor) {
-        case 1: 
+        case 0: 
             update_floor_lamp_1(on_off);
             break;
-        case 2:
+        case 1:
             update_floor_lamp_2(on_off);
             break;
-        case 3:
+        case 2:
             update_floor_lamp_3(on_off);
             break;
-        case 4:
+        case 3:
             update_floor_lamp_4(on_off);
     }
 };
