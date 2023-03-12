@@ -40,7 +40,9 @@ int peripherals_check_obstruction() {
 void peripherals_open_door_timer() {
     open_door();
     peripherals_timer(3);
-    close_door();
+    if (!elevio_obstruction()) {
+        close_door();
+    }
 }
 
 int peripherals_check_valid_floor() {
@@ -58,7 +60,6 @@ void peripherals_button_polling() {
             int btnPressed = elevio_callButton(f, b);
             
             if(btnPressed == 1) {
-                elevio_buttonLamp(f, b, btnPressed);
                 queue_create_new_order(f, b);
             }
         }
@@ -90,39 +91,3 @@ void peripherals_update_floor_lamp(int current_floor, uint8_t on_off) {
     }
 };
 
-// Possible new
-void peripherals_update_floor_lamp2(int current_floor) {
-    switch(current_floor) {
-        case 1: 
-            update_floor_lamp_1(1);
-            update_floor_lamp_2(0);
-            update_floor_lamp_3(0);
-            update_floor_lamp_4(0);
-            break;
-        case 2:
-            update_floor_lamp_1(0);
-            update_floor_lamp_2(1);
-            update_floor_lamp_3(0);
-            update_floor_lamp_4(0);
-            break;
-        case 3:
-            update_floor_lamp_1(0);
-            update_floor_lamp_2(0);
-            update_floor_lamp_3(1);
-            update_floor_lamp_4(0);
-            break;
-        case 4:
-            update_floor_lamp_1(0);
-            update_floor_lamp_2(0);
-            update_floor_lamp_3(0);
-            update_floor_lamp_4(1);
-    }
-};
-
-
-void peripherals_update_current_order() {
-    return;
-}
-
-void peripherals_start_stop_timer() {
-};

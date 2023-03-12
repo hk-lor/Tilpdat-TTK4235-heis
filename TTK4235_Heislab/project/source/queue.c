@@ -33,7 +33,7 @@ int queue_initalize() {
 
 int queue_insert(struct order* new_order) {
 
-    if(new_order == NULL) {
+    if(new_order == NULL || new_order->floor == global_elevator_current_floor) {
         return 1;
     } 
 
@@ -218,6 +218,8 @@ int queue_flush() {
             queue_delete(order);
         }
     }
+
+    queue_length = 0;
 
     queue_set_global_orders_as_empty();
 

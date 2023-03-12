@@ -36,6 +36,8 @@ static transitions_t state_transitions[] = {
 volatile event_t event;
 stateMachine_t stateMachine;
 
+static int started;
+
 static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
@@ -51,7 +53,10 @@ void fsm_init_enter()
     event = no_event;
     init_lights();
     queue_initalize();
-    peripherals_goto_floor_one();
+    if (started == 0) {
+        peripherals_goto_floor_one();
+    }
+    started = 1;
     event = state_found;
 };
 
@@ -60,7 +65,9 @@ void fsm_idle_enter()
     printf("Idle enter! \n");
     event = no_event;
     peripherals_open_door_timer();
+    printf("opendoor timer done \n");
     queue_remove_floor_orders(elevator_current_floor);
+    printf("queue remove floor orders \n");
 };
 
 void fsm_active_up_enter()
@@ -82,8 +89,7 @@ void fsm_stop_enter()
     update_stop_button(1);
     elevio_motorDirection(DIRN_STOP);
     queue_flush();
-    if (peripherals_check_valid_floor())
-    {
+    if (peripherals_check_valid_floor() != 1) {
         peripherals_open_door_timer();
     }
 };
@@ -97,11 +103,11 @@ void fsm_valid_floor_check_enter()
 
     if (peripherals_check_valid_floor())
     {
-        fsm_idle_enter();
+        fsm_init_enter();
     }
     else
     {
-        fsm_init_enter();
+        fsm_idle_enter();
     }
 };
 
@@ -174,20 +180,22 @@ void fsm_init_update()
 
 void fsm_idle_update()
 {
+    printf("IDLE UPDATE \n");
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
     peripherals_button_polling();
-    peripherals_check_obstruction();
 
     // event for stop button
-    if (fetch_stop_button_status() == 1)
+    int stop_button_status = elevio_stopButton();
+    if (stop_button_status != 0)
     {
+        update_stop_button(1);
         event = stop_button_pressed;
     }
 
     // event for either going up or down
-    if (current_order.floor != -1)
+    if (current_order.floor != -1 && elevio_obstruction() != 1)
     {
         if ((current_order.floor > elevator_current_floor)) 
         {
@@ -195,8 +203,6 @@ void fsm_idle_update()
         }
         if ( (current_order.floor < elevator_current_floor))
         {
-            printf("current_order floor: %i   elevator_current_floor: %i \n", current_order.floor, elevator_current_floor);
-            printf("TEST \n");
             event = order_down;
         }
     }
@@ -209,12 +215,13 @@ void fsm_active_up_update()
 
     peripherals_button_polling();
 
-    if (fetch_stop_button_status())
+    if (elevio_stopButton())
     {
+        update_stop_button(1);
         event = stop_button_pressed;
     }
 
-    if(current_order.floor == elevator_current_floor)
+    if(current_order.floor == elevator_current_floor && peripherals_check_valid_floor() == 0)
     {
             elevio_motorDirection(DIRN_STOP);
             event = valid_floor_in_queue;
@@ -228,12 +235,13 @@ void fsm_active_down_update()
 
     peripherals_button_polling();
 
-    if (fetch_stop_button_status())
+    if (elevio_stopButton())
     {
+        update_stop_button(1);
         event = stop_button_pressed;
     }
 
-    if(current_order.floor == elevator_current_floor)
+    if(current_order.floor == elevator_current_floor && peripherals_check_valid_floor() == 0)
     {
             elevio_motorDirection(DIRN_STOP);
             event = valid_floor_in_queue;
@@ -243,19 +251,21 @@ void fsm_active_down_update()
 void fsm_stop_update()
 {
     // if not stop button is pressed timeout and then event = stop_button_time_out
-    if (!fetch_stop_button_status())
+    peripherals_button_polling();
+    if (!elevio_stopButton())
     {
         update_stop_button(0);
         event = stop_button_time_out;
     }
-    peripherals_button_polling();
     if (peripherals_check_valid_floor() != 1)
     {
         open_door();
     }
     else
     {
-        close_door();
+        if (elevio_obstruction() != 0) {
+            close_door();
+        }
     }
 }
 
@@ -297,8 +307,8 @@ int util_fsm_values()
 
 void fsm_entry()
 {
+    
     fsm_init_enter();
-
     while (1)
     {
         volatile int state_transitions_array_len = sizeof(state_transitions) / sizeof(state_transitions[0]);
@@ -330,12 +340,14 @@ void fsm_entry()
             if (stateMachine.currState == state_transitions[i].currState)
             {
                 (stateFunctionA[stateMachine.currState].update_function)();
+                printf("update function commence \n");
                 break;
             }
         }
 
-        util_fsm_print_current_order();
-        util_fsm_print_next_order();
-        util_fsm_values();
+        //util_fsm_print_current_order();
+        // util_fsm_print_next_order();
+        // util_fsm_values();
+        // util_queue_print();
     }
 }
