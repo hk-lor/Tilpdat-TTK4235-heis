@@ -34,14 +34,9 @@ int queue_initalize() {
 
 int queue_insert(struct order* new_order) {
 
-    if(new_order == NULL) {
+    if(new_order == NULL || new_order->floor == global_elevator_current_floor) {
         return 1;
-    } else if(new_order->floor == global_elevator_current_floor) {
-        open_door();
-        peripherals_open_door_timer();
-        return 1;
-    }
-
+    } 
 
     new_order->next = head;
     if(head != NULL) {
@@ -217,11 +212,9 @@ int queue_create_new_order(int floor, ButtonType dir) {
 
 int queue_flush() {
     struct order* order = NULL;
-    printf("FLUSHING ORDERS!!! \n");
     for(int floor = 0; floor < N_FLOORS; floor++) {
         order = queue_search(floor);
         if(order != NULL) {
-            printf("DELETING ORDER!!! \n");
             util_print_order(order);
             queue_delete(order);
         }
