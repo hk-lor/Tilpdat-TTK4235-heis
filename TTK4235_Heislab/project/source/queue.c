@@ -6,6 +6,7 @@
 #include "../source/driver/elevio.h"
 #include "../include/queue.h"
 #include "../include/elevator_panels.h"
+#include "../include/peripherals.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue variables
@@ -33,9 +34,14 @@ int queue_initalize() {
 
 int queue_insert(struct order* new_order) {
 
-    if(new_order == NULL || new_order->floor == global_elevator_current_floor) {
+    if(new_order == NULL) {
         return 1;
-    } 
+    } else if(new_order->floor == global_elevator_current_floor) {
+        open_door();
+        peripherals_open_door_timer();
+        return 1;
+    }
+
 
     new_order->next = head;
     if(head != NULL) {
@@ -211,10 +217,12 @@ int queue_create_new_order(int floor, ButtonType dir) {
 
 int queue_flush() {
     struct order* order = NULL;
-
+    printf("FLUSHING ORDERS!!! \n");
     for(int floor = 0; floor < N_FLOORS; floor++) {
         order = queue_search(floor);
         if(order != NULL) {
+            printf("DELETING ORDER!!! \n");
+            util_print_order(order);
             queue_delete(order);
         }
     }
@@ -307,6 +315,7 @@ void queue_update_fsm(struct fsm_packet* packet) {
     packet->next_order_floor = global_elevator_next_order.floor;
 
     packet->elevator_current_floor = global_elevator_current_floor;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,19 +327,19 @@ int queue_update() {
 
     for (int i = 0; i < queue_length; ++i) {
         struct order* order = queue_fetch_order(i);
-
-        if(order == NULL && queue_length == 0) {
+       
+        if(order == NULL || queue_length == 0) {
             queue_set_global_orders_as_empty();
             return 1;
         } 
+        
         else {
             if(global_elevator_current_order.floor == -1) {         // Check if current_order is empty
                 queue_assign_current_global_order(order);
-
-            } else if (global_elevator_next_order.floor == -1) {     // Check if next_order is empty
+            } 
+            else if (global_elevator_next_order.floor == -1) {     // Check if next_order is empty
                 queue_assign_next_global_order(order);
             }
-            
             else if(order->dir == BUTTON_CAB) {
                 // printf("CABIN \n");
                 int previous_dir = global_elevator_current_floor - global_previous_floor;

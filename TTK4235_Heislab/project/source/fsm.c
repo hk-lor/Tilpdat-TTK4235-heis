@@ -64,7 +64,9 @@ void fsm_idle_enter()
 {
     printf("Idle enter! \n");
     event = no_event;
-    peripherals_open_door_timer();
+    if (peripherals_check_valid_floor() == 0) {
+        peripherals_open_door_timer();
+    }
     queue_remove_floor_orders(elevator_current_floor);
 };
 
@@ -178,7 +180,6 @@ void fsm_init_update()
 
 void fsm_idle_update()
 {
-    printf("IDLE UPDATE \n");
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
@@ -249,6 +250,8 @@ void fsm_active_down_update()
 void fsm_stop_update()
 {
     // if not stop button is pressed timeout and then event = stop_button_time_out
+    queue_flush(); // Delete all new orders
+
     peripherals_button_polling();
     if (!elevio_stopButton())
     {
@@ -351,3 +354,6 @@ void fsm_entry()
         // util_queue_print();
     }
 }
+
+// Dør skal ikke åpnes mellom etasjer
+// stopp knapp holdes inne --> ikke legg inn nye queues.
