@@ -209,7 +209,9 @@ void fsm_idle_update()
         }
         if(current_order.floor == elevator_current_floor) {
             queue_remove_floor_orders(elevator_current_floor);
-            peripherals_open_door_timer();
+            if (peripherals_check_valid_floor() == 0) {
+                peripherals_open_door_timer();
+            }
         }
     }
 }

@@ -156,22 +156,24 @@ void update_floor_lamp_4(uint8_t lamp_value) {
 void init_lights() {
     close_door();
 
+
 // Heispanel
-    update_button_elevator_1(0);
-    update_button_elevator_2(0);
-    update_button_elevator_3(0);
-    update_button_elevator_4(0);
+    elevio_buttonLamp(0, BUTTON_CAB, 0);
+    elevio_buttonLamp(1, BUTTON_CAB, 0);
+    elevio_buttonLamp(2, BUTTON_CAB, 0);
+    elevio_buttonLamp(3, BUTTON_CAB, 0);
 
     update_stop_button(0);
 
 // Etasjepanel
-    update_floor_button_1_up(0);
-    update_floor_button_2_up(0);
-    update_floor_button_3_up(0);
+    elevio_buttonLamp(0, BUTTON_HALL_UP, 0);
+    elevio_buttonLamp(1, BUTTON_HALL_UP, 0);
+    elevio_buttonLamp(2, BUTTON_HALL_UP, 0);
 
-    update_floor_button_2_down (0);
-    update_floor_button_3_down (0);
-    update_floor_button_4_down (0);
+
+    elevio_buttonLamp(0, BUTTON_HALL_DOWN, 0);
+    elevio_buttonLamp(1, BUTTON_HALL_DOWN, 0);
+    elevio_buttonLamp(2, BUTTON_HALL_DOWN, 0);
 
     update_floor_lamp_1(0);
     update_floor_lamp_2(0);
