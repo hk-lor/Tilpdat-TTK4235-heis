@@ -175,7 +175,6 @@ void fsm_update_state()
     next_order.floor = current_packet.next_order_floor;
 
     elevator_current_floor = current_packet.elevator_current_floor;
-    elevator_direction= current_packet.direction;
 }
 
 void fsm_init_update()
@@ -232,6 +231,7 @@ void fsm_idle_update()
 
 void fsm_active_up_update()
 {
+    elevator_direction = 1;
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
@@ -252,6 +252,7 @@ void fsm_active_up_update()
 
 void fsm_active_down_update()
 {
+    elevator_direction = -1;
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
