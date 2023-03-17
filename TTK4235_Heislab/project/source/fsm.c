@@ -148,6 +148,9 @@ void fsm_active_down_exit()
 void fsm_stop_exit()
 {
     printf("Stop exit \n");
+    if (peripherals_check_valid_floor() == 1) {
+        peripherals_timer(3);
+    }
     update_stop_button(0);
 }
 
@@ -203,6 +206,10 @@ void fsm_idle_update()
         if ( (current_order.floor < elevator_current_floor))
         {
             event = order_down;
+        }
+        if(current_order.floor == elevator_current_floor) {
+            queue_remove_floor_orders(elevator_current_floor);
+            peripherals_open_door_timer();
         }
     }
 }

@@ -30,6 +30,7 @@ void queue_remove_floor_orders(int floor);
 struct order* queue_search(int floor);
 struct order* queue_fetch_latest_order();
 struct order* queue_fetch_order(int i);
+int queue_find_order(int floor, ButtonType dir);
 
 // Queue Algorithm functions
 void queue_assign_current_global_order(struct order* order);

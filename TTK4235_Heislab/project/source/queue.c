@@ -34,7 +34,7 @@ int queue_initalize() {
 
 int queue_insert(struct order* new_order) {
 
-    if(new_order == NULL || new_order->floor == global_elevator_current_floor) {
+    if(new_order == NULL) {
         return 1;
     } 
 
@@ -92,8 +92,7 @@ int queue_insert(struct order* new_order) {
                     update_button_elevator_4(1);
                 }
                 break;
-        }
-
+            }
     return 0;
 }
 
@@ -185,6 +184,19 @@ struct order* queue_fetch_order(int i) {
     return order;
 };
 
+int queue_find_order(int floor, ButtonType dir) {    
+    struct order* order = head;
+
+    while (order != NULL && order->floor != floor && order->dir != dir) {
+        order = order->next;
+    }
+    
+    if(order == NULL) {
+        return 0;
+    } else {
+        return 1; // return allocated structure (has to be freed)
+    }                              
+}
 
 struct order* queue_search(int floor) {
     struct order* order = head;
@@ -205,8 +217,15 @@ int queue_create_new_order(int floor, ButtonType dir) {
     new_order->dir = dir;
     new_order->floor = floor;
 
-    queue_insert(new_order);
+    // int order_exist = queue_find_order(floor, dir);
+    // if(order_exist) {
+    //     return 1;
+    // } else {
+    //     queue_insert(new_order);
+    // }
+    // 
 
+    queue_insert(new_order);
     return 0;
 }
 
