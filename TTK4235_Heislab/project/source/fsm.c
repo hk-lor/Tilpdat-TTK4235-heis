@@ -38,6 +38,7 @@ stateMachine_t stateMachine;
 
 static int started;
 
+static int elevator_direction;
 static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
@@ -174,6 +175,7 @@ void fsm_update_state()
     next_order.floor = current_packet.next_order_floor;
 
     elevator_current_floor = current_packet.elevator_current_floor;
+    elevator_direction= current_packet.direction;
 }
 
 void fsm_init_update()
@@ -212,6 +214,18 @@ void fsm_idle_update()
             if (peripherals_check_valid_floor() == 0) {
                 peripherals_open_door_timer();
             }
+            if(elevator_direction > 0) {
+                while(peripherals_check_valid_floor()) {
+                    elevio_motorDirection(DIRN_UP);
+                }
+            } 
+            else {
+                while(peripherals_check_valid_floor()) {
+                    elevio_motorDirection(DIRN_DOWN);
+                }   
+            }
+            elevio_motorDirection(DIRN_STOP);
+            peripherals_open_door_timer();
         }
     }
 }

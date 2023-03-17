@@ -16,6 +16,7 @@ struct fsm_packet {
     int next_order_dir;
     int next_order_floor;
     int elevator_current_floor;
+    int direction;
 };
 
 // Basic operations 

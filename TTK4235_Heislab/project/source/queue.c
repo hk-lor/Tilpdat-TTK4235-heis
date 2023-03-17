@@ -15,7 +15,7 @@
 static struct order* head;                      // Linked list queue head
 static int queue_length = 0;
 
-static int global_elevator_current_floor ;
+static int global_elevator_current_floor;
 static int global_previous_floor;
 
 static struct order global_elevator_current_order;
@@ -327,6 +327,7 @@ void queue_update_fsm(struct fsm_packet* packet) {
     packet->next_order_floor = global_elevator_next_order.floor;
 
     packet->elevator_current_floor = global_elevator_current_floor;
+    packet->direction = global_elevator_current_order.floor - global_elevator_current_floor;
 
 }
 
