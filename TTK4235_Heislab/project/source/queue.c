@@ -358,8 +358,8 @@ int queue_update() {
             else {        // Determines if we need to do stops along the way
                 if(order->dir == BUTTON_HALL_UP) {
                     int future_dir = global_elevator_current_order.floor - global_elevator_current_floor;
-                    int new_order_dir = order->floor - global_elevator_current_floor;
-
+                    int new_order_dir = 1;
+                    
                     // Check if order cab direction matches previous (Negative = down, positive = up)
 
                     if((new_order_dir > 0 && future_dir > 0)) {
@@ -379,7 +379,7 @@ int queue_update() {
         
                 if(order->dir == BUTTON_HALL_DOWN) {
                     int future_dir = global_elevator_current_order.floor - global_elevator_current_floor;
-                    int new_order_dir = order->floor - global_elevator_current_floor;
+                    int new_order_dir = -1;
 
                     // Check if order cab direction matches previous (Negative = down, positive = up)
 
