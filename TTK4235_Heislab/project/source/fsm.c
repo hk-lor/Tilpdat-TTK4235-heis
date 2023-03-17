@@ -39,6 +39,7 @@ stateMachine_t stateMachine;
 static int started;
 
 static int elevator_direction;
+
 static int elevator_current_floor;
 static struct order current_order;
 static struct order next_order;
@@ -73,12 +74,14 @@ void fsm_idle_enter()
 
 void fsm_active_up_enter()
 {
+    elevator_direction = 1;
     printf("Active up enter! \n");
     event = no_event;
     elevio_motorDirection(DIRN_UP);
 };
 void fsm_active_down_enter()
 {
+    elevator_direction = -1;
     printf("Active down enter! \n");
     event = no_event;
     elevio_motorDirection(DIRN_DOWN);
@@ -213,7 +216,9 @@ void fsm_idle_update()
             if (peripherals_check_valid_floor() == 0) {
                 peripherals_open_door_timer();
             }
-            if(elevator_direction > 0) {
+            
+            printf("Direction %i \n", elevator_direction);
+            if(elevator_direction == -1) {
                 while(peripherals_check_valid_floor()) {
                     elevio_motorDirection(DIRN_UP);
                 }
@@ -231,7 +236,6 @@ void fsm_idle_update()
 
 void fsm_active_up_update()
 {
-    elevator_direction = 1;
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
@@ -252,7 +256,6 @@ void fsm_active_up_update()
 
 void fsm_active_down_update()
 {
-    elevator_direction = -1;
     queue_update_fsm(&current_packet);
     fsm_update_state();
 
