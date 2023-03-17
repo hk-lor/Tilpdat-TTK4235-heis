@@ -335,27 +335,66 @@ int queue_update() {
             }
             else if(order->dir == BUTTON_CAB) {
                 // printf("CABIN \n");
-                int previous_dir = global_elevator_current_floor - global_previous_floor;
-                int future_dir = order->floor - global_elevator_current_floor;
-                if((previous_dir > 0 && future_dir > 0) || (previous_dir < 0 & future_dir < 0)) { // Check if order cab direction matches previous (Negative = down, positive = up)
-                    queue_assign_next_global_order(&global_elevator_current_order);
-                    queue_assign_current_global_order(order);
-                }
-            }
-            else {        // Determines if we need to do stops along the way
-                if(order->dir == BUTTON_HALL_UP) {
-                    // printf("DIR UP \n");
+
+                int future_dir = global_elevator_current_order.floor - global_elevator_current_floor;
+                int new_order_dir = order->floor - global_elevator_current_floor;
+
+                // Check if order cab direction matches previous (Negative = down, positive = up)
+
+                if((new_order_dir > 0 && future_dir > 0)) {
                     if(order->floor < global_elevator_current_order.floor) {
                         queue_assign_next_global_order(&global_elevator_current_order);
                         queue_assign_current_global_order(order);
                     }
                 }
-        
-                if(order->dir == BUTTON_HALL_DOWN) {
-                    // printf("DIR DOWN \n");
-                    if(order->floor >  global_elevator_current_order.floor) {
+                    
+                if(new_order_dir < 0 & future_dir < 0) { 
+                     if(order->floor > global_elevator_current_order.floor) {
                         queue_assign_next_global_order(&global_elevator_current_order);
                         queue_assign_current_global_order(order);
+                    }       
+                }
+            }
+            else {        // Determines if we need to do stops along the way
+                if(order->dir == BUTTON_HALL_UP) {
+                    int future_dir = global_elevator_current_order.floor - global_elevator_current_floor;
+                    int new_order_dir = order->floor - global_elevator_current_floor;
+
+                    // Check if order cab direction matches previous (Negative = down, positive = up)
+
+                    if((new_order_dir > 0 && future_dir > 0)) {
+                        if(order->floor < global_elevator_current_order.floor) {
+                            queue_assign_next_global_order(&global_elevator_current_order);
+                            queue_assign_current_global_order(order);
+                        }
+                    }
+                        
+                    if(new_order_dir < 0 & future_dir < 0) { 
+                        if(order->floor > global_elevator_current_order.floor) {
+                            queue_assign_next_global_order(&global_elevator_current_order);
+                            queue_assign_current_global_order(order);
+                        }       
+                    }
+                }
+        
+                if(order->dir == BUTTON_HALL_DOWN) {
+                    int future_dir = global_elevator_current_order.floor - global_elevator_current_floor;
+                    int new_order_dir = order->floor - global_elevator_current_floor;
+
+                    // Check if order cab direction matches previous (Negative = down, positive = up)
+
+                    if((new_order_dir > 0 && future_dir > 0)) {
+                        if(order->floor < global_elevator_current_order.floor) {
+                            queue_assign_next_global_order(&global_elevator_current_order);
+                            queue_assign_current_global_order(order);
+                        }
+                    }
+                        
+                    if(new_order_dir < 0 & future_dir < 0) { 
+                        if(order->floor > global_elevator_current_order.floor) {
+                            queue_assign_next_global_order(&global_elevator_current_order);
+                            queue_assign_current_global_order(order);
+                        }       
                     }
                 }
             }
